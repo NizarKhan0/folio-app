@@ -21,6 +21,10 @@
                     <flux:sidebar.item icon="user" :href="route('admin.profile')" :current="request()->routeIs('admin.profile')" wire:navigate>
                         {{ __('Profile & Hero') }}
                     </flux:sidebar.item>
+
+                    <flux:sidebar.item icon="folder-git-2" :href="route('admin.projects')" :current="request()->routeIs('admin.projects')" wire:navigate>
+                        {{ __('Projects') }}
+                    </flux:sidebar.item>
                 </flux:sidebar.group>
             </flux:sidebar.nav>
 
