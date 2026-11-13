@@ -16,6 +16,12 @@
                         {{ __('Dashboard') }}
                     </flux:sidebar.item>
                 </flux:sidebar.group>
+
+                <flux:sidebar.group :heading="__('Portfolio')" class="grid">
+                    <flux:sidebar.item icon="user" :href="route('admin.profile')" :current="request()->routeIs('admin.profile')" wire:navigate>
+                        {{ __('Profile & Hero') }}
+                    </flux:sidebar.item>
+                </flux:sidebar.group>
             </flux:sidebar.nav>
 
             <flux:spacer />
