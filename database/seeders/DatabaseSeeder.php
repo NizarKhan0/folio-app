@@ -30,6 +30,7 @@ class DatabaseSeeder extends Seeder
         $this->call([
             ProfileSeeder::class,
             ProjectSeeder::class,
+            ExperienceSkillSeeder::class,
         ]);
     }
 }

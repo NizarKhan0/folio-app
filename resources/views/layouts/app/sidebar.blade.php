@@ -25,6 +25,10 @@
                     <flux:sidebar.item icon="folder-git-2" :href="route('admin.projects')" :current="request()->routeIs('admin.projects')" wire:navigate>
                         {{ __('Projects') }}
                     </flux:sidebar.item>
+
+                    <flux:sidebar.item icon="book-open-text" :href="route('admin.experience-skills')" :current="request()->routeIs('admin.experience-skills')" wire:navigate>
+                        {{ __('Experience & Skills') }}
+                    </flux:sidebar.item>
                 </flux:sidebar.group>
             </flux:sidebar.nav>
 
