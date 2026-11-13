@@ -237,12 +237,12 @@
                 placeholder="Describe the project architecture, key features, and impact..."
             />
 
-            <flux:input
-                wire:model="techStackInput"
-                :label="__('Tech Stack (comma-separated)')"
-                type="text"
-                required
-                placeholder="Laravel, Livewire, Tailwind CSS, MySQL"
+            <x-tech-stack-picker
+                :label="__('Tech Stack')"
+                :options="$this->availableSkills"
+                :selected="$selectedTechStack"
+                :required="true"
+                wire:model.live="selectedTechStack"
             />
 
             <div class="grid gap-4 sm:grid-cols-2">

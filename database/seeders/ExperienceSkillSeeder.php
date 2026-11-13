@@ -84,4 +84,3 @@ class ExperienceSkillSeeder extends Seeder
         }
     }
 }
-

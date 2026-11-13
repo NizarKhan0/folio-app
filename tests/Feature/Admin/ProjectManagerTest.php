@@ -47,7 +47,7 @@ class ProjectManagerTest extends TestCase
             ->call('openCreateModal')
             ->set('title', 'Zaryue Cloud Billing')
             ->set('description', 'Multi-tenant billing platform built on Laravel.')
-            ->set('techStackInput', 'Laravel, Livewire, MySQL, Laravel')
+            ->set('selectedTechStack', ['Laravel', 'Livewire', 'MySQL', 'Laravel'])
             ->set('demo_url', 'https://billing.zaryue.com')
             ->set('repo_url', 'https://github.com/nizarkhan/billing')
             ->set('thumbnail', $thumbnail)
@@ -82,7 +82,7 @@ class ProjectManagerTest extends TestCase
             ->call('openEditModal', $project->id)
             ->set('title', 'New Title')
             ->set('slug', 'new-title')
-            ->set('techStackInput', 'PHP, Laravel')
+            ->set('selectedTechStack', ['PHP', 'Laravel'])
             ->call('save')
             ->assertHasNoErrors()
             ->call('togglePublished', $project->id);

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Livewire\Admin;
 
 use App\Models\Project;
+use App\Models\Skill;
 use Flux\Flux;
 use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Collection;
@@ -40,7 +41,8 @@ class ProjectManager extends Component
 
     public string $description = '';
 
-    public string $techStackInput = '';
+    /** @var array<int, string> */
+    public array $selectedTechStack = [];
 
     public ?string $demo_url = null;
 
@@ -88,6 +90,21 @@ class ProjectManager extends Component
         return $this->projects()->where('is_featured', true)->count();
     }
 
+    /**
+     * @return array<int, string>
+     */
+    #[Computed]
+    public function availableSkills(): array
+    {
+        $skills = Skill::query()
+            ->orderBy('sort_order')
+            ->orderBy('name')
+            ->pluck('name')
+            ->all();
+
+        return array_values(array_unique(array_merge($skills, $this->selectedTechStack)));
+    }
+
     public function updatedTitle(string $value): void
     {
         if ($this->editingId === null) {
@@ -112,7 +129,7 @@ class ProjectManager extends Component
         $this->title = $project->title;
         $this->slug = $project->slug;
         $this->description = $project->description;
-        $this->techStackInput = implode(', ', $project->tech_stack);
+        $this->selectedTechStack = $project->tech_stack;
         $this->demo_url = $project->demo_url;
         $this->repo_url = $project->repo_url;
         $this->is_featured = $project->is_featured;
@@ -136,7 +153,8 @@ class ProjectManager extends Component
                 Rule::unique('projects', 'slug')->ignore($this->editingId),
             ],
             'description' => ['required', 'string', 'max:5000'],
-            'techStackInput' => ['required', 'string', 'max:1000'],
+            'selectedTechStack' => ['required', 'array', 'min:1'],
+            'selectedTechStack.*' => ['required', 'string', 'max:100'],
             'demo_url' => ['nullable', 'url', 'max:500'],
             'repo_url' => ['nullable', 'url', 'max:500'],
             'is_featured' => ['required', 'boolean'],
@@ -145,19 +163,11 @@ class ProjectManager extends Component
             'thumbnail' => ['nullable', 'image', 'max:3072'],
         ]);
 
-        $techStack = $this->parseTechStack($validated['techStackInput']);
-
-        if ($techStack === []) {
-            $this->addError('techStackInput', 'Please enter at least one technology.');
-
-            return;
-        }
-
         $data = [
             'title' => $validated['title'],
             'slug' => $validated['slug'],
             'description' => $validated['description'],
-            'tech_stack' => $techStack,
+            'tech_stack' => array_values(array_unique($validated['selectedTechStack'])),
             'demo_url' => $validated['demo_url'] !== '' ? $validated['demo_url'] : null,
             'repo_url' => $validated['repo_url'] !== '' ? $validated['repo_url'] : null,
             'is_featured' => $validated['is_featured'],
@@ -258,22 +268,6 @@ class ProjectManager extends Component
         return view('livewire.admin.project-manager');
     }
 
-    /**
-     * @return array<int, string>
-     */
-    private function parseTechStack(string $input): array
-    {
-        $items = array_map(
-            static fn (string $item): string => trim($item),
-            explode(',', $input),
-        );
-
-        return array_values(array_unique(array_filter(
-            $items,
-            static fn (string $item): bool => $item !== '',
-        )));
-    }
-
     private function swapOrder(int $id, int $direction): void
     {
         $ordered = Project::query()
@@ -327,7 +321,7 @@ class ProjectManager extends Component
         $this->title = '';
         $this->slug = '';
         $this->description = '';
-        $this->techStackInput = '';
+        $this->selectedTechStack = [];
         $this->demo_url = null;
         $this->repo_url = null;
         $this->is_featured = true;

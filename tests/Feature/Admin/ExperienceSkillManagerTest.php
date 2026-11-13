@@ -46,7 +46,7 @@ class ExperienceSkillManagerTest extends TestCase
             ->set('location', 'Putrajaya, Malaysia')
             ->set('period', 'January 2026 - Present')
             ->set('description', 'Leading Laravel architecture.')
-            ->set('techStackInput', 'Laravel, Livewire, MySQL')
+            ->set('selectedTechStack', ['Laravel', 'Livewire', 'MySQL'])
             ->call('saveExperience')
             ->assertHasNoErrors();
 
@@ -148,4 +148,3 @@ class ExperienceSkillManagerTest extends TestCase
         $this->assertTrue(Skill::query()->where('name', 'Docker')->exists());
     }
 }
-

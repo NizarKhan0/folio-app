@@ -53,4 +53,3 @@ class Skill extends Model
         return self::CATEGORIES[$this->category] ?? $this->category;
     }
 }
-

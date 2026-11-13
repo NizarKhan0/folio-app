@@ -262,24 +262,20 @@
                 placeholder="Summarize key achievements, responsibilities, and measurable impact..."
             />
 
-            <div class="grid gap-4 sm:grid-cols-3">
-                <div class="sm:col-span-2">
-                    <flux:input
-                        wire:model="techStackInput"
-                        :label="__('Tech Stack (comma-separated)')"
-                        type="text"
-                        placeholder="Laravel, Livewire, MySQL, Tailwind CSS"
-                    />
-                </div>
+            <x-tech-stack-picker
+                :label="__('Tech Stack')"
+                :options="$this->availableSkills"
+                :selected="$selectedTechStack"
+                wire:model.live="selectedTechStack"
+            />
 
-                <flux:input
-                    wire:model="experienceSortOrder"
-                    :label="__('Sort Order')"
-                    type="number"
-                    min="0"
-                    required
-                />
-            </div>
+            <flux:input
+                wire:model="experienceSortOrder"
+                :label="__('Sort Order')"
+                type="number"
+                min="0"
+                required
+            />
 
             <div class="flex justify-end gap-3 pt-2">
                 <flux:button type="button" variant="ghost" wire:click="$set('showExperienceModal', false)">

@@ -55,4 +55,3 @@ class Experience extends Model
         return $trimmed !== '' ? Str::upper(Str::substr($trimmed, 0, 1)) : '?';
     }
 }
-

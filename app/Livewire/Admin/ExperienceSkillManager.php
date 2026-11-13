@@ -48,7 +48,8 @@ class ExperienceSkillManager extends Component
 
     public string $description = '';
 
-    public string $techStackInput = '';
+    /** @var array<int, string> */
+    public array $selectedTechStack = [];
 
     public int $experienceSortOrder = 0;
 
@@ -83,6 +84,17 @@ class ExperienceSkillManager extends Component
             ->get();
     }
 
+    /**
+     * @return array<int, string>
+     */
+    #[Computed]
+    public function availableSkills(): array
+    {
+        $skills = $this->skills()->pluck('name')->all();
+
+        return array_values(array_unique(array_merge($skills, $this->selectedTechStack)));
+    }
+
     public function openCreateExperienceModal(): void
     {
         $this->resetExperienceForm();
@@ -101,7 +113,7 @@ class ExperienceSkillManager extends Component
         $this->location = $experience->location;
         $this->period = $experience->period;
         $this->description = $experience->description;
-        $this->techStackInput = implode(', ', $experience->tech_stack ?? []);
+        $this->selectedTechStack = $experience->tech_stack ?? [];
         $this->experienceSortOrder = $experience->sort_order;
         $this->showExperienceModal = true;
     }
@@ -114,11 +126,12 @@ class ExperienceSkillManager extends Component
             'location' => ['nullable', 'string', 'max:255'],
             'period' => ['required', 'string', 'max:255'],
             'description' => ['required', 'string', 'max:5000'],
-            'techStackInput' => ['nullable', 'string', 'max:1000'],
+            'selectedTechStack' => ['nullable', 'array'],
+            'selectedTechStack.*' => ['required', 'string', 'max:100'],
             'experienceSortOrder' => ['required', 'integer', 'min:0'],
         ]);
 
-        $techStack = $this->parseTechStack($validated['techStackInput'] ?? '');
+        $techStack = array_values(array_unique($validated['selectedTechStack'] ?? []));
 
         $data = [
             'role' => $validated['role'],
@@ -205,7 +218,7 @@ class ExperienceSkillManager extends Component
 
         $this->showSkillModal = false;
         $this->resetSkillForm();
-        unset($this->skills);
+        unset($this->skills, $this->availableSkills);
 
         Flux::toast(variant: 'success', text: $message);
     }
@@ -255,7 +268,7 @@ class ExperienceSkillManager extends Component
             $message = 'Experience deleted.';
         } elseif ($this->deletingType === 'skill') {
             Skill::query()->findOrFail($this->deletingId)->delete();
-            unset($this->skills);
+            unset($this->skills, $this->availableSkills);
             $message = 'Skill deleted.';
         } else {
             return;
@@ -272,22 +285,6 @@ class ExperienceSkillManager extends Component
     public function render(): View
     {
         return view('livewire.admin.experience-skill-manager');
-    }
-
-    /**
-     * @return array<int, string>
-     */
-    private function parseTechStack(string $input): array
-    {
-        $items = array_map(
-            static fn (string $item): string => trim($item),
-            explode(',', $input),
-        );
-
-        return array_values(array_unique(array_filter(
-            $items,
-            static fn (string $item): bool => $item !== '',
-        )));
     }
 
     /**
@@ -339,7 +336,7 @@ class ExperienceSkillManager extends Component
         $this->location = null;
         $this->period = '';
         $this->description = '';
-        $this->techStackInput = '';
+        $this->selectedTechStack = [];
         $this->experienceSortOrder = 0;
     }
 
@@ -352,4 +349,3 @@ class ExperienceSkillManager extends Component
         $this->skillSortOrder = 0;
     }
 }
-

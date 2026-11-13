@@ -29,6 +29,21 @@
                     <flux:sidebar.item icon="book-open-text" :href="route('admin.experience-skills')" :current="request()->routeIs('admin.experience-skills')" wire:navigate>
                         {{ __('Experience & Skills') }}
                     </flux:sidebar.item>
+
+                    @php
+                        $unreadMessagesBadge = \Illuminate\Support\Facades\Schema::hasTable('messages')
+                            ? \App\Models\Message::unread()->count()
+                            : 0;
+                    @endphp
+                    <flux:sidebar.item
+                        icon="inbox"
+                        :href="route('admin.messages')"
+                        :current="request()->routeIs('admin.messages')"
+                        :badge="$unreadMessagesBadge > 0 ? $unreadMessagesBadge : null"
+                        wire:navigate
+                    >
+                        {{ __('Messages') }}
+                    </flux:sidebar.item>
                 </flux:sidebar.group>
             </flux:sidebar.nav>
 
