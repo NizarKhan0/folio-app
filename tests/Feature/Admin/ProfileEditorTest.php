@@ -123,8 +123,8 @@ class ProfileEditorTest extends TestCase
 
         $this->assertSame('Nizar Khan', $profile->name);
         $this->assertSame("Hi, I'm Nizar Khan", $profile->headline);
-        $this->assertSame('Fullstack PHP Developer — Laravel, Livewire, Filament, DevOps', $profile->tagline);
-        $this->assertSame('Putrajaya, Malaysia', $profile->location);
+        $this->assertSame('Fullstack PHP Developer · Laravel, Livewire & Filament', $profile->tagline);
+        $this->assertSame('Kuala Lumpur, Malaysia', $profile->location);
         $this->assertTrue($profile->is_available);
     }
 

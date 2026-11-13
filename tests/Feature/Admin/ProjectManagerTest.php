@@ -207,4 +207,61 @@ class ProjectManagerTest extends TestCase
         $this->assertSame(1, $project->sort_order);
         $this->assertContains('Livewire', $project->tech_stack);
     }
+
+    public function test_project_manager_enforces_maximum_six_featured_projects(): void
+    {
+        $user = User::factory()->create();
+
+        for ($i = 1; $i <= 6; $i++) {
+            Project::query()->create([
+                'title' => "Featured {$i}",
+                'slug' => "featured-{$i}",
+                'description' => "Featured description {$i}.",
+                'tech_stack' => ['Laravel'],
+                'is_featured' => true,
+                'is_published' => true,
+                'sort_order' => $i,
+            ]);
+        }
+
+        $seventh = Project::query()->create([
+            'title' => 'Seventh Project',
+            'slug' => 'seventh-project',
+            'description' => 'Not featured initially.',
+            'tech_stack' => ['PHP'],
+            'is_featured' => false,
+            'is_published' => true,
+            'sort_order' => 7,
+        ]);
+
+        // Creating a 7th featured project should fail validation on is_featured.
+        Livewire::actingAs($user)
+            ->test(ProjectManager::class)
+            ->call('openCreateModal')
+            ->assertSet('is_featured', false)
+            ->set('title', 'Eighth Project')
+            ->set('description', 'Attempt to exceed max featured.')
+            ->set('selectedTechStack', ['Laravel'])
+            ->set('is_featured', true)
+            ->call('save')
+            ->assertHasErrors(['is_featured']);
+
+        // Toggling featured on a 7th project should not exceed 6 featured projects.
+        Livewire::actingAs($user)
+            ->test(ProjectManager::class)
+            ->call('toggleFeatured', $seventh->id);
+
+        $this->assertFalse($seventh->fresh()->is_featured);
+
+        // Unfeaturing one project allows featuring the 7th project.
+        $first = Project::query()->where('slug', 'featured-1')->firstOrFail();
+
+        Livewire::actingAs($user)
+            ->test(ProjectManager::class)
+            ->call('toggleFeatured', $first->id)
+            ->call('toggleFeatured', $seventh->id);
+
+        $this->assertFalse($first->fresh()->is_featured);
+        $this->assertTrue($seventh->fresh()->is_featured);
+    }
 }

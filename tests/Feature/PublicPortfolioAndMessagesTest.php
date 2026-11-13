@@ -31,14 +31,15 @@ class PublicPortfolioAndMessagesTest extends TestCase
             ->assertSee('Get In Touch');
     }
 
-    public function test_public_portfolio_navbar_shows_dashboard_when_authenticated(): void
+    public function test_public_portfolio_navbar_does_not_show_dashboard_when_authenticated(): void
     {
         $user = User::factory()->create();
 
         $this->actingAs($user)
             ->get(route('home'))
             ->assertOk()
-            ->assertSee('Dashboard');
+            ->assertDontSee('Dashboard')
+            ->assertSee('Contact Me');
     }
 
     public function test_public_contact_form_validates_and_saves_message(): void
@@ -125,7 +126,7 @@ class PublicPortfolioAndMessagesTest extends TestCase
         $this->assertSame(1, Message::query()->where('is_read', true)->count());
     }
 
-    public function test_public_portfolio_shows_six_projects_in_grid_and_all_in_modal(): void
+    public function test_public_portfolio_shows_six_featured_projects_in_grid_and_all_in_modal(): void
     {
         for ($i = 1; $i <= 8; $i++) {
             Project::query()->create([
@@ -133,6 +134,7 @@ class PublicPortfolioAndMessagesTest extends TestCase
                 'slug' => "portfolio-project-{$i}",
                 'description' => "Description {$i}",
                 'tech_stack' => ['Laravel'],
+                'is_featured' => $i <= 6,
                 'is_published' => true,
                 'sort_order' => $i,
             ]);
@@ -141,7 +143,7 @@ class PublicPortfolioAndMessagesTest extends TestCase
         $component = Livewire::test(PublicPortfolio::class)
             ->assertSee('Portfolio Project 1')
             ->assertSee('Portfolio Project 6')
-            ->assertSee('View All Projects')
+            ->assertSee('All Projects (8)')
             ->set('showAllProjectsModal', true)
             ->assertSee('Portfolio Project 7')
             ->assertSee('Portfolio Project 8');

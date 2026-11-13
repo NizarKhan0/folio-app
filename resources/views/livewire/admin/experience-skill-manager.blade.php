@@ -1,7 +1,10 @@
 <section class="mx-auto w-full max-w-6xl space-y-6">
     <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-            <flux:heading size="xl">{{ __('Experience & Skills') }}</flux:heading>
+            <div class="text-xs font-semibold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">
+                {{ __('Career & Stack') }}
+            </div>
+            <flux:heading size="xl" class="mt-0.5">{{ __('Experience & Skills') }}</flux:heading>
             <flux:text class="mt-1">
                 {{ __('Manage your career timeline, tech stacks, and technical skills.') }}
             </flux:text>
@@ -9,35 +12,37 @@
 
         <div class="flex items-center gap-3">
             @if ($activeTab === 'experiences')
-                <flux:button variant="primary" wire:click="openCreateExperienceModal">
+                <flux:button variant="primary" icon="plus" wire:click="openCreateExperienceModal">
                     {{ __('Add Experience') }}
                 </flux:button>
             @else
-                <flux:button variant="primary" wire:click="openCreateSkillModal">
+                <flux:button variant="primary" icon="plus" wire:click="openCreateSkillModal">
                     {{ __('Add Skill') }}
                 </flux:button>
             @endif
         </div>
     </div>
 
-    <div class="flex items-center gap-2 border-b border-zinc-200 pb-3 dark:border-zinc-700">
-        <flux:button
-            type="button"
-            size="sm"
-            :variant="$activeTab === 'experiences' ? 'primary' : 'ghost'"
-            wire:click="$set('activeTab', 'experiences')"
-        >
-            {{ __('Experience') }} ({{ $this->experiences->count() }})
-        </flux:button>
+    <div class="flex flex-wrap items-center justify-between gap-4 border-b border-zinc-200 pb-3 dark:border-zinc-700/80">
+        <div class="inline-flex items-center gap-1 rounded-xl border border-zinc-200 bg-zinc-100/70 p-1 dark:border-zinc-700 dark:bg-zinc-800/60">
+            <flux:button
+                type="button"
+                size="sm"
+                :variant="$activeTab === 'experiences' ? 'primary' : 'ghost'"
+                wire:click="$set('activeTab', 'experiences')"
+            >
+                {{ __('Experience') }} ({{ $this->experiences->count() }})
+            </flux:button>
 
-        <flux:button
-            type="button"
-            size="sm"
-            :variant="$activeTab === 'skills' ? 'primary' : 'ghost'"
-            wire:click="$set('activeTab', 'skills')"
-        >
-            {{ __('Skills') }} ({{ $this->skills->count() }})
-        </flux:button>
+            <flux:button
+                type="button"
+                size="sm"
+                :variant="$activeTab === 'skills' ? 'primary' : 'ghost'"
+                wire:click="$set('activeTab', 'skills')"
+            >
+                {{ __('Skills') }} ({{ $this->skills->count() }})
+            </flux:button>
+        </div>
     </div>
 
     @if ($activeTab === 'experiences')
@@ -45,11 +50,11 @@
             @forelse ($this->experiences as $experience)
                 <div
                     wire:key="experience-{{ $experience->id }}"
-                    class="rounded-xl border border-zinc-200 bg-white p-6 dark:border-zinc-700 dark:bg-zinc-900"
+                    class="rounded-2xl border border-zinc-200 bg-white p-6 shadow-xs transition hover:border-zinc-300 dark:border-zinc-700/80 dark:bg-zinc-900 dark:hover:border-zinc-600"
                 >
                     <div class="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
                         <div class="flex items-start gap-4">
-                            <div class="flex size-12 shrink-0 items-center justify-center rounded-xl bg-zinc-900 text-lg font-bold text-white dark:bg-zinc-100 dark:text-zinc-900">
+                            <div class="flex size-12 shrink-0 items-center justify-center rounded-2xl bg-zinc-900 text-lg font-bold text-white shadow-xs dark:bg-zinc-100 dark:text-zinc-900">
                                 {{ $experience->companyInitial() }}
                             </div>
 
@@ -66,52 +71,54 @@
                                     @endif
                                 </div>
 
-                                <div class="text-xs font-medium text-zinc-500 dark:text-zinc-400">
+                                <div class="inline-flex items-center rounded-full bg-zinc-100 px-2.5 py-0.5 font-mono text-xs font-medium text-zinc-600 dark:bg-zinc-800 dark:text-zinc-300">
                                     {{ $experience->period }}
                                 </div>
                             </div>
                         </div>
 
-                        <div class="flex flex-wrap items-center gap-2">
+                        <div class="inline-flex shrink-0 items-center gap-1 self-start rounded-lg border border-zinc-200 bg-zinc-50/70 p-1 dark:border-zinc-700 dark:bg-zinc-800/50">
                             <flux:button
                                 type="button"
                                 size="xs"
                                 variant="ghost"
+                                icon="arrow-up"
                                 wire:click="moveExperienceUp({{ $experience->id }})"
                                 :disabled="$loop->first"
                                 title="{{ __('Move Up') }}"
-                            >
-                                ↑
-                            </flux:button>
+                                aria-label="{{ __('Move Up') }}"
+                            />
 
                             <flux:button
                                 type="button"
                                 size="xs"
                                 variant="ghost"
+                                icon="arrow-down"
                                 wire:click="moveExperienceDown({{ $experience->id }})"
                                 :disabled="$loop->last"
                                 title="{{ __('Move Down') }}"
-                            >
-                                ↓
-                            </flux:button>
+                                aria-label="{{ __('Move Down') }}"
+                            />
 
                             <flux:button
                                 type="button"
-                                size="sm"
-                                variant="outline"
+                                size="xs"
+                                variant="ghost"
+                                icon="pencil-square"
                                 wire:click="openEditExperienceModal({{ $experience->id }})"
-                            >
-                                {{ __('Edit') }}
-                            </flux:button>
+                                title="{{ __('Edit') }}"
+                                aria-label="{{ __('Edit') }}"
+                            />
 
                             <flux:button
                                 type="button"
-                                size="sm"
+                                size="xs"
                                 variant="danger"
+                                icon="trash"
                                 wire:click="confirmDelete('experience', {{ $experience->id }})"
-                            >
-                                {{ __('Delete') }}
-                            </flux:button>
+                                title="{{ __('Delete') }}"
+                                aria-label="{{ __('Delete') }}"
+                            />
                         </div>
                     </div>
 
@@ -120,7 +127,7 @@
                     </flux:text>
 
                     @if (! empty($experience->tech_stack))
-                        <div class="mt-4 flex flex-wrap gap-1.5">
+                        <div class="mt-4 flex flex-wrap gap-1.5 border-t border-zinc-100 pt-4 dark:border-zinc-800">
                             @foreach ($experience->tech_stack as $tech)
                                 <flux:badge size="sm" color="zinc">{{ $tech }}</flux:badge>
                             @endforeach
@@ -128,7 +135,7 @@
                     @endif
                 </div>
             @empty
-                <div class="rounded-xl border border-zinc-200 bg-white p-12 text-center dark:border-zinc-700 dark:bg-zinc-900">
+                <div class="rounded-2xl border border-zinc-200 bg-white p-12 text-center shadow-xs dark:border-zinc-700/80 dark:bg-zinc-900">
                     <flux:heading size="lg">{{ __('No experiences yet') }}</flux:heading>
                     <flux:text class="mt-1">
                         {{ __('Click "Add Experience" to add your first work experience.') }}
@@ -138,7 +145,7 @@
         </div>
     @else
         @if ($this->skills->isEmpty())
-            <div class="rounded-xl border border-zinc-200 bg-white p-12 text-center dark:border-zinc-700 dark:bg-zinc-900">
+            <div class="rounded-2xl border border-zinc-200 bg-white p-12 text-center shadow-xs dark:border-zinc-700/80 dark:bg-zinc-900">
                 <flux:heading size="lg">{{ __('No skills yet') }}</flux:heading>
                 <flux:text class="mt-1">
                     {{ __('Click "Add Skill" to add your technical skills.') }}
@@ -149,9 +156,9 @@
                 @foreach ($this->skills as $skill)
                     <div
                         wire:key="skill-{{ $skill->id }}"
-                        class="flex items-center justify-between gap-3 rounded-xl border border-zinc-200 bg-white p-4 dark:border-zinc-700 dark:bg-zinc-900"
+                        class="flex items-center justify-between gap-3 rounded-2xl border border-zinc-200 bg-white p-4 shadow-xs transition hover:border-zinc-300 dark:border-zinc-700/80 dark:bg-zinc-900 dark:hover:border-zinc-600"
                     >
-                        <div class="min-w-0 space-y-1">
+                        <div class="min-w-0 space-y-1.5">
                             <div class="flex items-center gap-2">
                                 <span class="truncate font-semibold text-zinc-900 dark:text-zinc-100">
                                     {{ $skill->name }}
@@ -163,46 +170,48 @@
                             </div>
                         </div>
 
-                        <div class="flex shrink-0 items-center gap-1">
+                        <div class="inline-flex shrink-0 items-center gap-0.5 rounded-lg border border-zinc-200 bg-zinc-50/70 p-0.5 dark:border-zinc-700 dark:bg-zinc-800/50">
                             <flux:button
                                 type="button"
                                 size="xs"
                                 variant="ghost"
+                                icon="arrow-up"
                                 wire:click="moveSkillUp({{ $skill->id }})"
                                 :disabled="$loop->first"
                                 title="{{ __('Move Up') }}"
-                            >
-                                ↑
-                            </flux:button>
+                                aria-label="{{ __('Move Up') }}"
+                            />
 
                             <flux:button
                                 type="button"
                                 size="xs"
                                 variant="ghost"
+                                icon="arrow-down"
                                 wire:click="moveSkillDown({{ $skill->id }})"
                                 :disabled="$loop->last"
                                 title="{{ __('Move Down') }}"
-                            >
-                                ↓
-                            </flux:button>
+                                aria-label="{{ __('Move Down') }}"
+                            />
 
                             <flux:button
                                 type="button"
                                 size="xs"
-                                variant="outline"
+                                variant="ghost"
+                                icon="pencil-square"
                                 wire:click="openEditSkillModal({{ $skill->id }})"
-                            >
-                                {{ __('Edit') }}
-                            </flux:button>
+                                title="{{ __('Edit') }}"
+                                aria-label="{{ __('Edit') }}"
+                            />
 
                             <flux:button
                                 type="button"
                                 size="xs"
                                 variant="danger"
+                                icon="trash"
                                 wire:click="confirmDelete('skill', {{ $skill->id }})"
-                            >
-                                {{ __('Delete') }}
-                            </flux:button>
+                                title="{{ __('Delete') }}"
+                                aria-label="{{ __('Delete') }}"
+                            />
                         </div>
                     </div>
                 @endforeach
@@ -355,4 +364,3 @@
         </div>
     </flux:modal>
 </section>
-

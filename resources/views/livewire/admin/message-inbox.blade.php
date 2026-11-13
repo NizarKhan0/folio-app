@@ -1,37 +1,55 @@
 <section class="mx-auto w-full max-w-6xl space-y-6">
     <div>
-        <flux:heading size="xl">{{ __('Messages') }}</flux:heading>
+        <div class="text-xs font-semibold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">
+            {{ __('Inbox') }}
+        </div>
+        <flux:heading size="xl" class="mt-0.5">{{ __('Messages') }}</flux:heading>
         <flux:text class="mt-1">
             {{ __('Review and manage inquiries submitted from your public portfolio contact form.') }}
         </flux:text>
     </div>
 
     <div class="grid gap-4 sm:grid-cols-3">
-        <div class="rounded-xl border border-zinc-200 bg-white p-5 dark:border-zinc-700 dark:bg-zinc-900">
-            <flux:text class="text-sm font-medium">{{ __('Total Messages') }}</flux:text>
-            <div class="mt-2 text-3xl font-semibold text-zinc-900 dark:text-zinc-100">
+        <div class="rounded-2xl border border-zinc-200 bg-white p-5 shadow-xs dark:border-zinc-700/80 dark:bg-zinc-900">
+            <div class="flex items-center justify-between">
+                <flux:text class="text-xs font-semibold uppercase tracking-wider">{{ __('Total Messages') }}</flux:text>
+                <div class="flex size-9 items-center justify-center rounded-xl bg-zinc-500/10 text-zinc-600 dark:text-zinc-300">
+                    <flux:icon name="inbox" class="size-4" />
+                </div>
+            </div>
+            <div class="mt-3 text-3xl font-bold tracking-tight text-zinc-900 tabular-nums dark:text-zinc-100">
                 {{ $this->totalCount }}
             </div>
         </div>
 
-        <div class="rounded-xl border border-zinc-200 bg-white p-5 dark:border-zinc-700 dark:bg-zinc-900">
-            <flux:text class="text-sm font-medium">{{ __('Unread Messages') }}</flux:text>
-            <div class="mt-2 text-3xl font-semibold text-zinc-900 dark:text-zinc-100">
+        <div class="rounded-2xl border border-zinc-200 bg-white p-5 shadow-xs dark:border-zinc-700/80 dark:bg-zinc-900">
+            <div class="flex items-center justify-between">
+                <flux:text class="text-xs font-semibold uppercase tracking-wider">{{ __('Unread Messages') }}</flux:text>
+                <div class="flex size-9 items-center justify-center rounded-xl bg-blue-500/10 text-blue-600 dark:text-blue-400">
+                    <flux:icon name="envelope" class="size-4" />
+                </div>
+            </div>
+            <div class="mt-3 text-3xl font-bold tracking-tight text-zinc-900 tabular-nums dark:text-zinc-100">
                 {{ $this->unreadCount }}
             </div>
         </div>
 
-        <div class="rounded-xl border border-zinc-200 bg-white p-5 dark:border-zinc-700 dark:bg-zinc-900">
-            <flux:text class="text-sm font-medium">{{ __('Read Messages') }}</flux:text>
-            <div class="mt-2 text-3xl font-semibold text-zinc-900 dark:text-zinc-100">
+        <div class="rounded-2xl border border-zinc-200 bg-white p-5 shadow-xs dark:border-zinc-700/80 dark:bg-zinc-900">
+            <div class="flex items-center justify-between">
+                <flux:text class="text-xs font-semibold uppercase tracking-wider">{{ __('Read Messages') }}</flux:text>
+                <div class="flex size-9 items-center justify-center rounded-xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
+                    <flux:icon name="envelope-open" class="size-4" />
+                </div>
+            </div>
+            <div class="mt-3 text-3xl font-bold tracking-tight text-zinc-900 tabular-nums dark:text-zinc-100">
                 {{ $this->totalCount - $this->unreadCount }}
             </div>
         </div>
     </div>
 
-    <div class="overflow-hidden rounded-xl border border-zinc-200 bg-white dark:border-zinc-700 dark:bg-zinc-900">
+    <div class="overflow-hidden rounded-2xl border border-zinc-200 bg-white shadow-xs dark:border-zinc-700/80 dark:bg-zinc-900">
         @if ($this->messages->isEmpty())
-            <div class="p-12 text-center">
+            <div class="p-14 text-center">
                 <flux:heading size="lg">{{ __('Inbox is empty') }}</flux:heading>
                 <flux:text class="mt-1">
                     {{ __('Messages submitted through your contact form will appear here.') }}
@@ -39,26 +57,26 @@
             </div>
         @else
             <div class="overflow-x-auto">
-                <table class="min-w-full divide-y divide-zinc-200 text-left text-sm dark:divide-zinc-700">
-                    <thead class="bg-zinc-50 text-xs font-semibold uppercase tracking-wider text-zinc-600 dark:bg-zinc-800/60 dark:text-zinc-400">
+                <table class="min-w-full divide-y divide-zinc-200 text-left text-sm dark:divide-zinc-700/80">
+                    <thead class="bg-zinc-50/80 text-[11px] font-semibold uppercase tracking-wider text-zinc-500 dark:bg-zinc-800/50 dark:text-zinc-400">
                         <tr>
-                            <th class="px-4 py-3">{{ __('Sender') }}</th>
-                            <th class="px-4 py-3">{{ __('Subject & Message') }}</th>
-                            <th class="px-4 py-3">{{ __('Received') }}</th>
-                            <th class="px-4 py-3">{{ __('Status') }}</th>
-                            <th class="px-4 py-3 text-right">{{ __('Actions') }}</th>
+                            <th class="px-5 py-3.5">{{ __('Sender') }}</th>
+                            <th class="px-5 py-3.5">{{ __('Subject & Message') }}</th>
+                            <th class="px-5 py-3.5">{{ __('Received') }}</th>
+                            <th class="px-5 py-3.5">{{ __('Status') }}</th>
+                            <th class="px-5 py-3.5 text-right">{{ __('Actions') }}</th>
                         </tr>
                     </thead>
-                    <tbody class="divide-y divide-zinc-200 dark:divide-zinc-700">
+                    <tbody class="divide-y divide-zinc-200 dark:divide-zinc-800">
                         @foreach ($this->messages as $msg)
                             <tr
                                 wire:key="message-{{ $msg->id }}"
                                 @class([
-                                    'align-top',
-                                    'bg-zinc-50/70 dark:bg-zinc-800/30' => ! $msg->is_read,
+                                    'align-top transition hover:bg-zinc-50/80 dark:hover:bg-zinc-800/30',
+                                    'bg-blue-50/40 dark:bg-blue-950/15' => ! $msg->is_read,
                                 ])
                             >
-                                <td class="whitespace-nowrap px-4 py-4">
+                                <td class="whitespace-nowrap px-5 py-4">
                                     <div class="font-semibold text-zinc-900 dark:text-zinc-100">
                                         {{ $msg->name }}
                                     </div>
@@ -67,7 +85,7 @@
                                     </div>
                                 </td>
 
-                                <td class="px-4 py-4">
+                                <td class="px-5 py-4">
                                     <div class="font-medium text-zinc-900 dark:text-zinc-100">
                                         {{ $msg->subject ?: __('(No Subject)') }}
                                     </div>
@@ -76,11 +94,11 @@
                                     </p>
                                 </td>
 
-                                <td class="whitespace-nowrap px-4 py-4 text-xs text-zinc-500 dark:text-zinc-400">
+                                <td class="whitespace-nowrap px-5 py-4 text-xs text-zinc-500 dark:text-zinc-400">
                                     {{ $msg->created_at?->diffForHumans() }}
                                 </td>
 
-                                <td class="whitespace-nowrap px-4 py-4">
+                                <td class="whitespace-nowrap px-5 py-4">
                                     <button
                                         type="button"
                                         wire:click="toggleRead({{ $msg->id }})"
@@ -92,34 +110,37 @@
                                     </button>
                                 </td>
 
-                                <td class="whitespace-nowrap px-4 py-4 text-right">
-                                    <div class="flex justify-end gap-2">
+                                <td class="whitespace-nowrap px-5 py-4 text-right">
+                                    <div class="inline-flex items-center gap-1 rounded-lg border border-zinc-200 bg-zinc-50/70 p-1 dark:border-zinc-700 dark:bg-zinc-800/50">
                                         <flux:button
                                             type="button"
-                                            size="sm"
-                                            variant="outline"
-                                            wire:click="viewMessage({{ $msg->id }})"
-                                        >
-                                            {{ __('Read') }}
-                                        </flux:button>
-
-                                        <flux:button
-                                            type="button"
-                                            size="sm"
+                                            size="xs"
                                             variant="ghost"
-                                            wire:click="toggleRead({{ $msg->id }})"
-                                        >
-                                            {{ $msg->is_read ? __('Mark Unread') : __('Mark Read') }}
-                                        </flux:button>
+                                            icon="eye"
+                                            wire:click="viewMessage({{ $msg->id }})"
+                                            title="{{ __('Read') }}"
+                                            aria-label="{{ __('Read') }}"
+                                        />
 
                                         <flux:button
                                             type="button"
-                                            size="sm"
+                                            size="xs"
+                                            variant="ghost"
+                                            :icon="$msg->is_read ? 'envelope' : 'envelope-open'"
+                                            wire:click="toggleRead({{ $msg->id }})"
+                                            :title="$msg->is_read ? __('Mark Unread') : __('Mark Read')"
+                                            :aria-label="$msg->is_read ? __('Mark Unread') : __('Mark Read')"
+                                        />
+
+                                        <flux:button
+                                            type="button"
+                                            size="xs"
                                             variant="danger"
+                                            icon="trash"
                                             wire:click="confirmDelete({{ $msg->id }})"
-                                        >
-                                            {{ __('Delete') }}
-                                        </flux:button>
+                                            title="{{ __('Delete') }}"
+                                            aria-label="{{ __('Delete') }}"
+                                        />
                                     </div>
                                 </td>
                             </tr>
@@ -132,24 +153,23 @@
 
     <flux:modal wire:model="showViewModal" class="max-w-xl">
         <div class="space-y-4">
-            <div class="flex items-start justify-between gap-4">
-                <div>
+            <div class="space-y-1.5 pe-8">
+                <div class="flex flex-wrap items-center gap-2.5">
                     <flux:heading size="lg">
                         {{ $viewingSubject ?: __('(No Subject)') }}
                     </flux:heading>
-                    <flux:text class="mt-1 text-sm">
-                        {{ __('From:') }} {{ $viewingName }} ({{ $viewingEmail }})
-                    </flux:text>
-                    @if ($viewingDate)
-                        <flux:text class="text-xs text-zinc-500">
-                            {{ $viewingDate }}
-                        </flux:text>
-                    @endif
+                    <flux:badge :color="$viewingIsRead ? 'zinc' : 'blue'" size="sm">
+                        {{ $viewingIsRead ? __('Read') : __('Unread') }}
+                    </flux:badge>
                 </div>
-
-                <flux:badge :color="$viewingIsRead ? 'zinc' : 'blue'" size="sm">
-                    {{ $viewingIsRead ? __('Read') : __('Unread') }}
-                </flux:badge>
+                <flux:text class="text-sm">
+                    {{ __('From:') }} {{ $viewingName }} ({{ $viewingEmail }})
+                </flux:text>
+                @if ($viewingDate)
+                    <flux:text class="text-xs text-zinc-500">
+                        {{ $viewingDate }}
+                    </flux:text>
+                @endif
             </div>
 
             <flux:separator />
@@ -193,4 +213,3 @@
         </div>
     </flux:modal>
 </section>
-

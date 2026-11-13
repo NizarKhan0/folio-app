@@ -22,7 +22,7 @@ class ExperienceSkillSeeder extends Seeder
                 'location' => 'Putrajaya, Malaysia',
                 'period' => 'February 2025 - Present',
                 'description' => 'I successfully migrated digital assets from legacy platforms with 100% data accuracy and integrity, while enhancing website sections like galleries and news to align with stakeholder needs. I performed precise data entry following strict formatting and validation protocols, designed responsive layouts using HTML, CSS, Bootstrap, and JavaScript, and developed backend functionality with Yii2 to improve system scalability. Additionally, I built and maintained a custom Laravel-based CMS for non-technical teams, handled secure code patching and updates on production servers via VPN and onsite deployment, and actively participated in UAT sessions to translate feedback into technical requirements, ensuring seamless project handovers and compliance with new system standards.',
-                'tech_stack' => ['Livewire', 'Bootstrap', 'Tailwind CSS', 'Alpine JS', 'GitHub', 'Filament', 'Laravel', 'MySQL', 'JQuery', 'JavaScript', 'CSS', 'HTML', 'PHP', 'Yii2', 'DevOps'],
+                'tech_stack' => ['Livewire', 'Bootstrap', 'Tailwind CSS', 'Alpine JS', 'GitHub', 'Filament', 'Laravel', 'MySQL', 'JQuery', 'JavaScript', 'CSS', 'HTML', 'PHP', 'Yii2', 'DevOps', 'Go'],
                 'sort_order' => 1,
             ],
             [
@@ -73,7 +73,7 @@ class ExperienceSkillSeeder extends Seeder
             ['name' => 'GitHub', 'category' => 'devops_tools', 'sort_order' => 15],
             ['name' => 'JIRA', 'category' => 'devops_tools', 'sort_order' => 16],
             ['name' => 'Postman', 'category' => 'devops_tools', 'sort_order' => 17],
-            ['name' => 'Test', 'category' => 'devops_tools', 'sort_order' => 18],
+            ['name' => 'Go', 'category' => 'backend', 'sort_order' => 19],
         ];
 
         foreach ($skills as $skill) {

@@ -34,6 +34,12 @@ class PublicPortfolio extends Component
 
     public bool $showAllProjectsModal = false;
 
+    public bool $showProjectDetailModal = false;
+
+    public ?int $selectedProjectId = null;
+
+    public ?int $allProjectsDetailId = null;
+
     public string $skillCategoryFilter = 'all';
 
     #[Computed]
@@ -49,6 +55,49 @@ class PublicPortfolio extends Component
     public function projects(): Collection
     {
         return Project::published()->get();
+    }
+
+    #[Computed]
+    public function selectedProject(): ?Project
+    {
+        if ($this->selectedProjectId === null) {
+            return null;
+        }
+
+        return $this->projects()->firstWhere('id', $this->selectedProjectId);
+    }
+
+    public function viewProjectDetails(int $id): void
+    {
+        $this->selectedProjectId = $id;
+        $this->showProjectDetailModal = true;
+    }
+
+    #[Computed]
+    public function allProjectsDetail(): ?Project
+    {
+        if ($this->allProjectsDetailId === null) {
+            return null;
+        }
+
+        return $this->projects()->firstWhere('id', $this->allProjectsDetailId);
+    }
+
+    public function openAllProjectsDetail(int $id): void
+    {
+        $this->allProjectsDetailId = $id;
+    }
+
+    public function backToAllProjects(): void
+    {
+        $this->allProjectsDetailId = null;
+    }
+
+    public function updatedShowAllProjectsModal(bool $value): void
+    {
+        if (! $value) {
+            $this->allProjectsDetailId = null;
+        }
     }
 
     /**

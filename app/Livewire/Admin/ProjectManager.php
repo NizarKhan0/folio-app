@@ -25,6 +25,8 @@ class ProjectManager extends Component
 {
     use WithFileUploads;
 
+    public const MAX_FEATURED_PROJECTS = 6;
+
     public bool $showFormModal = false;
 
     public bool $showDeleteModal = false;
@@ -117,6 +119,7 @@ class ProjectManager extends Component
         $this->resetForm();
         $maxOrder = (int) Project::query()->max('sort_order');
         $this->sort_order = $maxOrder + 1;
+        $this->is_featured = Project::query()->where('is_featured', true)->count() < self::MAX_FEATURED_PROJECTS;
         $this->showFormModal = true;
     }
 
@@ -162,6 +165,22 @@ class ProjectManager extends Component
             'sort_order' => ['required', 'integer', 'min:0'],
             'thumbnail' => ['nullable', 'image', 'max:3072'],
         ]);
+
+        if ($validated['is_featured']) {
+            $otherFeaturedCount = Project::query()
+                ->where('is_featured', true)
+                ->when($this->editingId !== null, fn ($query) => $query->where('id', '!=', $this->editingId))
+                ->count();
+
+            if ($otherFeaturedCount >= self::MAX_FEATURED_PROJECTS) {
+                $this->addError(
+                    'is_featured',
+                    __('Maximum :max featured projects allowed. Unfeature another project first.', ['max' => self::MAX_FEATURED_PROJECTS]),
+                );
+
+                return;
+            }
+        }
 
         $data = [
             'title' => $validated['title'],
@@ -223,6 +242,32 @@ class ProjectManager extends Component
         Flux::toast(
             variant: 'success',
             text: $project->is_published ? 'Project published.' : 'Project moved to draft.',
+        );
+    }
+
+    public function toggleFeatured(int $id): void
+    {
+        $project = Project::query()->findOrFail($id);
+
+        if (! $project->is_featured) {
+            $featuredCount = Project::query()->where('is_featured', true)->count();
+
+            if ($featuredCount >= self::MAX_FEATURED_PROJECTS) {
+                Flux::toast(
+                    variant: 'danger',
+                    text: __('Maximum :max featured projects allowed. Unfeature another project first.', ['max' => self::MAX_FEATURED_PROJECTS]),
+                );
+
+                return;
+            }
+        }
+
+        $project->update(['is_featured' => ! $project->is_featured]);
+        unset($this->projects, $this->featuredCount);
+
+        Flux::toast(
+            variant: 'success',
+            text: $project->is_featured ? 'Project marked as featured.' : 'Project removed from featured.',
         );
     }
 

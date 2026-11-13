@@ -19,10 +19,15 @@ class ProfileSeeder extends Seeder
             [
                 'name' => 'Nizar Khan',
                 'headline' => "Hi, I'm Nizar Khan",
-                'tagline' => 'Fullstack PHP Developer — Laravel, Livewire, Filament, DevOps',
-                'bio' => 'Fullstack PHP Developer experienced in building custom Laravel & Livewire applications, migrating legacy digital assets with 100% data integrity, optimizing MySQL queries, and managing production deployments.',
-                'location' => 'Putrajaya, Malaysia',
+                'tagline' => 'Fullstack PHP Developer · Laravel, Livewire & Filament',
+                'bio' => 'I design and ship reliable web platforms, admin dashboards, and automated workflows — turning complex business processes and legacy databases into fast, production-ready systems.',
+                'location' => 'Kuala Lumpur, Malaysia',
                 'is_available' => true,
+                'email' => 'nizarkhan.digital@gmail.com',
+                'github_url' => 'https://github.com/NizarKhan0',
+                'linkedin_url' => null,
+                'resume_url' => null,
+                'avatar_path' => 'profile/avatars/AeOnkSqElXZqqCcT1HqPw7ygrQr3jxIvHwbVf3oZ.jpg',
             ],
         );
     }

@@ -3,7 +3,7 @@
     <head>
         @include('partials.head')
     </head>
-    <body class="min-h-screen bg-zinc-50 text-zinc-900 antialiased dark:bg-zinc-950 dark:text-zinc-100">
+    <body class="min-h-screen bg-[#06070B] text-zinc-100 antialiased">
         {{ $slot }}
 
         @persist('toast')
@@ -15,4 +15,3 @@
         @fluxScripts
     </body>
 </html>
-
