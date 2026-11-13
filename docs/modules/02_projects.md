@@ -17,9 +17,13 @@ Rujuk `AGENT.md` dan `docs/ARCHITECTURE.md`. Bina **Modul 02: Projects Showcase 
   3. **Update:** Butang Edit mengisi modal sedia ada tanpa reload, butang ubah urutan (`Move Up` / `Move Down` `sort_order`), serta toggle Published.
   4. **Delete:** Butang Delete pada setiap projek berserta **Confirmation Modal** keselamatan.
 
-### 4. Database Seeder (`ProjectSeeder.php` — Data Sebenar me.zaryue.com)
+### 4. Database Seeder (`ProjectSeeder.php` — Data Sebenar Terkini)
 - Jana rekod projek sebenar:
-  1. **Personal portfolio website**:
-     - `description`: `'Single-page portfolio with admin dashboard built on Laravel + Livewire + Flux UI, featuring CRUD content management, authentication with 2FA, drag-free sorting, image upload, contact form with email notification, and CI/CD via GitHub Actions.'`
-     - `tech_stack`: `["Livewire", "Tailwind CSS", "CSS", "PHP", "HTML", "MySQL", "Laravel", "GitHub"]`
+  1. **Personal portfolio website** (`personal-portfolio-website`):
+     - `description`: `'Cyberpunk HUD personal portfolio and full-featured admin CMS built on Laravel 13, Livewire 4, Flux UI, Alpine.js, and Tailwind CSS v4, featuring profile & hero management, project showcase with thumbnail uploads, career experience & categorized skills, contact inbox with email notifications, 2FA authentication, and CI/CD via GitHub Actions.'`
+     - `tech_stack`: `["Laravel", "Livewire", "Tailwind CSS", "Alpine JS", "PHP", "MySQL", "HTML", "CSS", "GitHub"]`
      - `demo_url`: `'https://me.zaryue.com/'`, `is_featured`: `true`, `is_published`: `true`, `sort_order`: `1`.
+  2. **LifeOS — Personal Command Center** (`life-os`):
+     - `description`: `'Self-hosted personal productivity and autonomous command center built with Laravel 13, Livewire 4, Flux UI, and Tailwind CSS v4. Consolidates tasks & habits, goals & milestones, wallets/budgets/transactions, recurring subscriptions, meetings with reminders, brain dumps, weekly reviews, and an automated Telegram briefing engine into a single dashboard.'`
+     - `tech_stack`: `["Laravel", "Livewire", "Flux UI", "Tailwind CSS", "PHP", "MySQL", "Fortify", "Telegram Bot"]`
+     - `demo_url`: `'http://127.0.0.1:8001/'`, `is_featured`: `true`, `is_published`: `true`, `sort_order`: `2`.

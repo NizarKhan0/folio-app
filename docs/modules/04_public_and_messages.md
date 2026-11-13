@@ -5,13 +5,13 @@ Rujuk `AGENT.md` dan `docs/ARCHITECTURE.md`. Bina **Modul 04: Public Single-Page
 - `messages`: `id`, `name` (string), `email` (string), `subject` (string, nullable), `message` (text), `is_read` (boolean, default: false), `timestamps`. Indeks: `['is_read', 'created_at']`.
 
 ### 2. Public Single-Page Portfolio (`app/Livewire/PublicPortfolio.php` pada laluan `/`)
-- Paparkan keseluruhan laman portfolio awam dalam satu halaman yang kemas, moden, dan responsif:
-  1. **Navbar:** Logo/Nama `Nizar Khan`, pautan sauh (`Home`, `Projects`, `Experience`, `Skills`, `Contact`), dan pautan `Dashboard` jika sedang log masuk.
-  2. **Hero Section:** Data daripada `Profile::current()` (`Hi, I\'m Nizar Khan`, tagline, bio, butang `Contact Me` & `View Projects`).
-  3. **Projects Section:** Grid projek daripada `Project::published()` lengkap dengan lencana `tech_stack` dan pautan `Demo →`.
-  4. **Experience Section:** Garis masa daripada `Experience::orderBy('sort_order')->get()` lengkap dengan huruf awal syarikat (`O`, `I`, `M`), lokasi, tempoh, huraian, dan lencana `tech_stack`.
-  5. **Skills Section:** Grid kemahiran daripada `Skill::orderBy('sort_order')->get()`.
-  6. **Get In Touch (Contact Form):** Borang Livewire reaktif (`name`, `email`, `subject`, `message`) yang terus menyimpan ke jadual `messages` + menghantar notifikasi e-mel/Telegram secara opsyenal menggunakan `rescue()`.
+- Paparkan keseluruhan laman portfolio awam dalam satu halaman bertema Cyberpunk HUD yang kemas, moden, dan responsif untuk mobile, tablet, & desktop:
+  1. **Navbar:** Logo/Nama `Nizar Khan`, status `SYS // ONLINE`, pautan sauh (`Home`, `Projects`, `Experience`, `Skills`, `Contact`), serta butang menu hamburger + laci navigasi untuk mobile (`md:hidden`).
+  2. **Hero Section:** Data daripada `Profile::current()` (`Hi, I'm Nizar Khan`, tagline, bio, butang `Contact Me`, `View Projects`, & pautan Resume/GitHub/LinkedIn) berserta kad identiti 3D Cyberpunk (`NETRUNNER_ID // 001`) dan statistik langsung.
+  3. **Projects Section:** Grid 3-lajur (`lg:grid-cols-3`) memaparkan maksimum 6 projek featured daripada `Project::published()`, lencana `tech_stack`, pautan `Demo →`/`Repository →`, butang `Show Details` (modal `<flux:modal>`), serta butang `All Projects (N) →` yang membuka katalog penuh bersama native top-layer `<dialog>` (`showModal()`) untuk `Show Details` tanpa menutup modal induk.
+  4. **Experience Section:** Garis masa daripada `Experience::orderBy('sort_order')->get()` lengkap dengan huruf awal syarikat (`O`, `I`, `M`), lokasi, tempoh, huraian boleh kembang (`Details +` / `Hide −`), dan lencana `tech_stack`.
+  5. **Skills Section:** Matriks keupayaan mengikut kategori (`backend`, `frontend`, `database`, `devops_tools`) dengan penapis kategori reaktif (`All`, `Backend`, dll.).
+  6. **Get In Touch (Contact Form):** Borang Livewire reaktif (`name`, `email`, `subject`, `message`) yang terus menyimpan ke jadual `messages` + menghantar notifikasi e-mel secara opsyenal menggunakan `rescue()`.
 
 ### 3. Admin Message Inbox (`app/Livewire/Admin/MessageInbox.php`)
 - Gunakan layout sidebar Livewire Starter Kit dan tambah menu `Messages` (berserta badge kiraan `unread`) pada sidebar.
