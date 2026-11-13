@@ -321,7 +321,6 @@
                                         // {{ __('DEVELOPER_PROFILE') }}
                                     </div>
                                     <h2 class="text-xl font-black tracking-tight text-white sm:text-2xl">{{ $profile->name }}</h2>
-                                    <p class="font-mono text-xs text-zinc-400">{{ $profile->location }}</p>
                                 </div>
                             </div>
 
@@ -743,9 +742,15 @@
                             @if ($profile->email)
                                 <div class="flex flex-wrap items-center justify-between gap-x-3 gap-y-1 border border-white/10 bg-white/[0.03] px-4 py-2.5">
                                     <span class="font-mono text-xs text-zinc-400">{{ __('EMAIL') }}</span>
-                                    <a href="mailto:{{ $profile->email }}" class="break-all font-mono text-xs font-semibold text-cyan-300 hover:underline">
-                                        {{ $profile->email }}
-                                    </a>
+                                    @if (str_contains($profile->email, '@'))
+                                        <a href="mailto:{{ $profile->email }}" class="break-all font-mono text-xs font-semibold text-cyan-300 hover:underline">
+                                            {{ $profile->email }}
+                                        </a>
+                                    @else
+                                        <span class="break-all font-mono text-xs font-semibold text-cyan-300 select-all">
+                                            {{ $profile->email }}
+                                        </span>
+                                    @endif
                                 </div>
                             @endif
 

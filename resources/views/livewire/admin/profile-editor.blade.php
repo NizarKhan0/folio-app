@@ -205,8 +205,8 @@
                 <flux:input
                     wire:model="email"
                     :label="__('Public Contact Email')"
-                    type="email"
-                    placeholder="nizar@zaryue.com"
+                    type="text"
+                    placeholder="test[at]gmail.com"
                 />
 
                 <flux:input

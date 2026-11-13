@@ -200,8 +200,8 @@ class ProjectManagerTest extends TestCase
 
         $project = Project::query()->where('slug', 'personal-portfolio-website')->firstOrFail();
 
-        $this->assertSame('Personal portfolio website', $project->title);
-        $this->assertSame('https://me.zaryue.com/', $project->demo_url);
+        $this->assertSame('Personal Portfolio Website', $project->title);
+        $this->assertSame('#', $project->demo_url);
         $this->assertTrue($project->is_featured);
         $this->assertTrue($project->is_published);
         $this->assertSame(1, $project->sort_order);

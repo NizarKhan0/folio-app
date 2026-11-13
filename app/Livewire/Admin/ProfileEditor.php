@@ -86,7 +86,7 @@ class ProfileEditor extends Component
             'bio' => ['nullable', 'string', 'max:2000'],
             'location' => ['required', 'string', 'max:255'],
             'is_available' => ['required', 'boolean'],
-            'email' => ['nullable', 'email', 'max:255'],
+            'email' => ['nullable', 'string', 'max:255'],
             'github_url' => ['nullable', 'url', 'max:500'],
             'linkedin_url' => ['nullable', 'url', 'max:500'],
             'resume_url' => ['nullable', 'url', 'max:500'],

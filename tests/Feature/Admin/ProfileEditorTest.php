@@ -109,10 +109,24 @@ class ProfileEditorTest extends TestCase
         Livewire::actingAs($user)
             ->test(ProfileEditor::class)
             ->set('name', '')
-            ->set('email', 'not-an-email')
+            ->set('email', 'nizarkhan.digital[at]gmail.com')
             ->set('github_url', 'not-a-url')
             ->call('save')
-            ->assertHasErrors(['name', 'email', 'github_url']);
+            ->assertHasErrors(['name', 'github_url'])
+            ->assertHasNoErrors(['email']);
+    }
+
+    public function test_profile_editor_allows_obfuscated_contact_email(): void
+    {
+        $user = User::factory()->create();
+
+        Livewire::actingAs($user)
+            ->test(ProfileEditor::class)
+            ->set('email', 'nizarkhan.digital[at]gmail.com')
+            ->call('save')
+            ->assertHasNoErrors();
+
+        $this->assertSame('nizarkhan.digital[at]gmail.com', Profile::current()->email);
     }
 
     public function test_profile_seeder_seeds_expected_singleton_record(): void

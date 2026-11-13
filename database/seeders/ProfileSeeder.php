@@ -23,7 +23,7 @@ class ProfileSeeder extends Seeder
                 'bio' => 'I design and ship reliable web platforms, admin dashboards, and automated workflows — turning complex business processes and legacy databases into fast, production-ready systems.',
                 'location' => 'Kuala Lumpur, Malaysia',
                 'is_available' => true,
-                'email' => 'nizarkhan.digital@gmail.com',
+                'email' => 'nizarkhan.digital[at]gmail.com',
                 'github_url' => 'https://github.com/NizarKhan0',
                 'linkedin_url' => null,
                 'resume_url' => null,

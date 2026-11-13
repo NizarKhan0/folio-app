@@ -25,7 +25,7 @@ class PublicPortfolioAndMessagesTest extends TestCase
         $this->get(route('home'))
             ->assertOk()
             ->assertSee("Hi, I'm Nizar Khan")
-            ->assertSee('Personal portfolio website')
+            ->assertSee('Personal Portfolio Website')
             ->assertSee('Opensoft Technologies Sdn Bhd')
             ->assertSee('Laravel')
             ->assertSee('Get In Touch');
