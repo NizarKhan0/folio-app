@@ -1,15 +1,23 @@
-# Stage 1: Build Vite + Tailwind CSS v4 assets
+# Stage 1: Resolve Composer vendor directory (needed by Flux CSS & Tailwind @source during Vite build)
+FROM composer:2 AS vendor
+WORKDIR /app
+
+COPY composer.json composer.lock ./
+RUN composer install --no-dev --no-interaction --prefer-dist --optimize-autoloader --no-scripts --ignore-platform-reqs
+
+# Stage 2: Build Vite + Tailwind CSS v4 assets
 FROM node:22-alpine AS assets
 WORKDIR /app
 
 COPY package.json package-lock.json* ./
 RUN npm ci
 
+COPY --from=vendor /app/vendor ./vendor
 COPY resources resources
 COPY vite.config.js ./
 RUN npm run build
 
-# Stage 2: PHP 8.4 + Apache Production Image
+# Stage 3: PHP 8.4 + Apache Production Image
 FROM php:8.4-apache
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
