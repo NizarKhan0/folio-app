@@ -39,6 +39,17 @@ class ProjectSeeder extends Seeder
                 'is_published' => true,
                 'sort_order' => 2,
             ],
+            [
+                'slug' => 'kanban-pmo',
+                'title' => 'Kanban PMO — Project Command Center',
+                'description' => 'Interactive project management and PMO command center built with Laravel 13, Livewire 4, Flux UI, Tailwind CSS v4, and the Anthropic Claude SDK. Features a drag-and-drop Kanban board with WIP limits, project & team PIC roster, rich tasks with subtasks and Ctrl+K search, live analytics & daily standup reports, an AI PMO assistant, and omnichannel automation across Telegram, Gmail, and WhatsApp.',
+                'tech_stack' => ['Laravel', 'Livewire', 'Flux UI', 'Tailwind CSS', 'PHP', 'MySQL', 'Anthropic AI', 'Telegram Bot'],
+                'demo_url' => 'http://127.0.0.1:8002/',
+                'repo_url' => null,
+                'is_featured' => true,
+                'is_published' => true,
+                'sort_order' => 3,
+            ],
         ];
 
         foreach ($projects as $project) {

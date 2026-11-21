@@ -7,6 +7,7 @@ namespace Tests\Feature;
 use App\Livewire\Admin\MessageInbox;
 use App\Livewire\PublicPortfolio;
 use App\Models\Message;
+use App\Models\Profile;
 use App\Models\Project;
 use App\Models\User;
 use Database\Seeders\DatabaseSeeder;
@@ -159,5 +160,71 @@ class PublicPortfolioAndMessagesTest extends TestCase
             ->set('skillCategoryFilter', 'database')
             ->assertSee('MySQL')
             ->assertDontSee('Docker');
+    }
+
+    public function test_public_portfolio_renders_seo_metadata_and_json_ld_schema(): void
+    {
+        $this->seed(DatabaseSeeder::class);
+
+        $this->get(route('home'))
+            ->assertOk()
+            ->assertSee('<link rel="canonical"', false)
+            ->assertSee('<meta name="description"', false)
+            ->assertSee('<meta property="og:title"', false)
+            ->assertSee('<meta name="twitter:card" content="summary_large_image"', false)
+            ->assertSee('"@type":"ProfilePage"', false)
+            ->assertSee('"@type":"Person"', false);
+    }
+
+    public function test_sitemap_xml_renders_successfully(): void
+    {
+        $this->seed(DatabaseSeeder::class);
+
+        $this->get(route('sitemap'))
+            ->assertOk()
+            ->assertHeader('Content-Type', 'application/xml; charset=UTF-8')
+            ->assertSee('<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">', false)
+            ->assertSee(url('/'), false);
+    }
+
+    public function test_robots_txt_renders_dynamically(): void
+    {
+        $this->get(route('robots'))
+            ->assertOk()
+            ->assertHeader('Content-Type', 'text/plain; charset=UTF-8')
+            ->assertSee('Disallow: /admin/', false)
+            ->assertSee('Sitemap: '.url('/sitemap.xml'), false);
+    }
+
+    public function test_contact_form_normalizes_obfuscated_at_email_for_notification(): void
+    {
+        Profile::current()->update([
+            'email' => 'nizarkhan.digital[at]gmail.com',
+        ]);
+
+        Livewire::test(PublicPortfolio::class)
+            ->set('name', 'Aiman')
+            ->set('email', 'aiman@example.com')
+            ->set('subject', 'Project Inquiry')
+            ->set('message', 'Interested in working together.')
+            ->call('submitContact')
+            ->assertHasNoErrors()
+            ->assertSet('contactSent', true);
+
+        $this->assertDatabaseHas('messages', [
+            'name' => 'Aiman',
+            'email' => 'aiman@example.com',
+            'subject' => 'Project Inquiry',
+        ]);
+    }
+
+    public function test_auth_pages_are_marked_noindex(): void
+    {
+        $this->assertStringEndsWith('/sys-console/login', route('login'));
+        $this->get('/login')->assertNotFound();
+
+        $this->get(route('login'))
+            ->assertOk()
+            ->assertSee('<meta name="robots" content="noindex, nofollow" />', false);
     }
 }

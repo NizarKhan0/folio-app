@@ -1,7 +1,7 @@
 <section class="mx-auto w-full max-w-6xl space-y-6">
     <div>
-        <div class="text-xs font-semibold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">
-            {{ __('Inbox') }}
+        <div class="font-mono text-xs font-bold uppercase tracking-widest text-cyan-700 dark:text-cyan-400">
+            04 // {{ __('Inbox') }}
         </div>
         <flux:heading size="xl" class="mt-0.5">{{ __('Messages') }}</flux:heading>
         <flux:text class="mt-1">
@@ -37,7 +37,7 @@
         <div class="rounded-2xl border border-zinc-200 bg-white p-5 shadow-xs dark:border-zinc-700/80 dark:bg-zinc-900">
             <div class="flex items-center justify-between">
                 <flux:text class="text-xs font-semibold uppercase tracking-wider">{{ __('Read Messages') }}</flux:text>
-                <div class="flex size-9 items-center justify-center rounded-xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
+                <div class="flex size-9 items-center justify-center rounded-xl bg-cyan-500/10 text-cyan-700 dark:text-cyan-400">
                     <flux:icon name="envelope-open" class="size-4" />
                 </div>
             </div>

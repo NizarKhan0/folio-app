@@ -63,8 +63,8 @@ class ExperienceSkillSeeder extends Seeder
             ['name' => 'Python', 'category' => 'backend', 'sort_order' => 5],
             ['name' => 'MySQL', 'category' => 'database', 'sort_order' => 6],
             ['name' => 'JavaScript', 'category' => 'frontend', 'sort_order' => 7],
-            ['name' => 'JQuery', 'category' => 'frontend', 'sort_order' => 8],
-            ['name' => 'Alpine JS', 'category' => 'frontend', 'sort_order' => 9],
+            ['name' => 'jQuery', 'category' => 'frontend', 'sort_order' => 8],
+            ['name' => 'Alpine.js', 'category' => 'frontend', 'sort_order' => 9],
             ['name' => 'Tailwind CSS', 'category' => 'frontend', 'sort_order' => 10],
             ['name' => 'Bootstrap', 'category' => 'frontend', 'sort_order' => 11],
             ['name' => 'HTML', 'category' => 'frontend', 'sort_order' => 12],
@@ -74,6 +74,15 @@ class ExperienceSkillSeeder extends Seeder
             ['name' => 'JIRA', 'category' => 'devops_tools', 'sort_order' => 16],
             ['name' => 'Postman', 'category' => 'devops_tools', 'sort_order' => 17],
             ['name' => 'Go', 'category' => 'backend', 'sort_order' => 19],
+            ['name' => 'Yii2', 'category' => 'backend', 'sort_order' => 20],
+            ['name' => 'Flux UI', 'category' => 'frontend', 'sort_order' => 21],
+            ['name' => 'SQLite', 'category' => 'database', 'sort_order' => 22],
+            ['name' => 'Git', 'category' => 'devops_tools', 'sort_order' => 23],
+            ['name' => 'GitHub Actions', 'category' => 'devops_tools', 'sort_order' => 24],
+            ['name' => 'Linux / Ubuntu', 'category' => 'devops_tools', 'sort_order' => 25],
+            ['name' => 'Claude', 'category' => 'devops_tools', 'sort_order' => 26],
+            ['name' => 'OpenCode', 'category' => 'devops_tools', 'sort_order' => 27],
+            ['name' => 'Antigravity', 'category' => 'devops_tools', 'sort_order' => 28],
         ];
 
         foreach ($skills as $skill) {

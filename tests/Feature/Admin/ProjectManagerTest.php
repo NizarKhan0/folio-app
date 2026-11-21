@@ -264,4 +264,25 @@ class ProjectManagerTest extends TestCase
         $this->assertFalse($first->fresh()->is_featured);
         $this->assertTrue($seventh->fresh()->is_featured);
     }
+
+    public function test_project_manager_allows_non_url_strings_for_demo_and_repo_urls(): void
+    {
+        $user = User::factory()->create();
+
+        Livewire::actingAs($user)
+            ->test(ProjectManager::class)
+            ->call('openCreateModal')
+            ->set('title', 'Internal Demo System')
+            ->set('description', 'System with placeholder demo and repo links.')
+            ->set('selectedTechStack', ['Laravel'])
+            ->set('demo_url', '#')
+            ->set('repo_url', 'private-repo')
+            ->call('save')
+            ->assertHasNoErrors();
+
+        $project = Project::query()->where('slug', 'internal-demo-system')->firstOrFail();
+
+        $this->assertSame('#', $project->demo_url);
+        $this->assertSame('private-repo', $project->repo_url);
+    }
 }

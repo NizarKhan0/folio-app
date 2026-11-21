@@ -135,7 +135,7 @@ class ExperienceSkillManagerTest extends TestCase
         $this->seed(ExperienceSkillSeeder::class);
 
         $this->assertSame(3, Experience::query()->count());
-        $this->assertSame(18, Skill::query()->count());
+        $this->assertSame(27, Skill::query()->count());
 
         $opensoft = Experience::query()->where('company', 'Opensoft Technologies Sdn Bhd')->firstOrFail();
         $intesh = Experience::query()->where('company', 'Intesh Synergy Sdn Bhd')->firstOrFail();

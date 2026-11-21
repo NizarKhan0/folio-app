@@ -1,8 +1,8 @@
 <section class="mx-auto w-full max-w-6xl space-y-6">
     <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-            <div class="text-xs font-semibold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">
-                {{ __('Showcase') }}
+            <div class="font-mono text-xs font-bold uppercase tracking-widest text-cyan-700 dark:text-cyan-400">
+                02 // {{ __('Showcase') }}
             </div>
             <flux:heading size="xl" class="mt-0.5">{{ __('Projects') }}</flux:heading>
             <flux:text class="mt-1">
@@ -31,7 +31,7 @@
         <div class="rounded-2xl border border-zinc-200 bg-white p-5 shadow-xs dark:border-zinc-700/80 dark:bg-zinc-900">
             <div class="flex items-center justify-between">
                 <flux:text class="text-xs font-semibold uppercase tracking-wider">{{ __('Published') }}</flux:text>
-                <div class="flex size-9 items-center justify-center rounded-xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
+                <div class="flex size-9 items-center justify-center rounded-xl bg-cyan-500/10 text-cyan-700 dark:text-cyan-400">
                     <flux:icon name="check-circle" class="size-4" />
                 </div>
             </div>
@@ -149,7 +149,7 @@
                                             <a
                                                 href="{{ $project->demo_url }}"
                                                 target="_blank"
-                                                class="font-medium text-emerald-600 underline underline-offset-2 hover:text-emerald-500 dark:text-emerald-400 dark:hover:text-emerald-300"
+                                                class="font-medium text-cyan-700 underline underline-offset-2 hover:text-cyan-600 dark:text-cyan-400 dark:hover:text-cyan-300"
                                             >
                                                 {{ __('Demo →') }}
                                             </a>
@@ -178,7 +178,7 @@
                                             wire:click="togglePublished({{ $project->id }})"
                                             class="cursor-pointer"
                                         >
-                                            <flux:badge :color="$project->is_published ? 'green' : 'zinc'" size="sm">
+                                            <flux:badge :color="$project->is_published ? 'cyan' : 'zinc'" size="sm">
                                                 {{ $project->is_published ? __('Published') : __('Draft') }}
                                             </flux:badge>
                                         </button>
@@ -276,15 +276,15 @@
                 <flux:input
                     wire:model="demo_url"
                     :label="__('Demo URL')"
-                    type="url"
-                    placeholder="https://me.zaryue.com/"
+                    type="text"
+                    placeholder="https://me.zaryue.com/ or #"
                 />
 
                 <flux:input
                     wire:model="repo_url"
                     :label="__('Repository URL')"
-                    type="url"
-                    placeholder="https://github.com/username/repo"
+                    type="text"
+                    placeholder="https://github.com/username/repo or #"
                 />
             </div>
 

@@ -1,8 +1,8 @@
 <section class="mx-auto w-full max-w-6xl space-y-6">
     <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-            <div class="text-xs font-semibold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">
-                {{ __('Career & Stack') }}
+            <div class="font-mono text-xs font-bold uppercase tracking-widest text-cyan-700 dark:text-cyan-400">
+                03 // {{ __('Career & Stack') }}
             </div>
             <flux:heading size="xl" class="mt-0.5">{{ __('Experience & Skills') }}</flux:heading>
             <flux:text class="mt-1">

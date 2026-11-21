@@ -5,6 +5,10 @@
     {{ filled($title ?? null) ? $title.' - '.config('app.name', 'Laravel') : config('app.name', 'Laravel') }}
 </title>
 
+<link rel="icon" type="image/svg+xml" href="{{ asset('favicon.svg') }}" />
+<link rel="icon" sizes="any" href="{{ asset('favicon.ico') }}" />
+<link rel="apple-touch-icon" href="{{ asset('apple-touch-icon.png') }}" />
+
 @fonts
 
 @vite(['resources/css/app.css', 'resources/js/app.js'])

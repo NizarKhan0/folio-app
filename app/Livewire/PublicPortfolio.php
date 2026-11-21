@@ -141,9 +141,12 @@ class PublicPortfolio extends Component
             'is_read' => false,
         ]);
 
-        $recipient = $this->profile()->email;
+        $rawRecipient = $this->profile()->email;
+        $recipient = $rawRecipient !== null
+            ? trim((string) preg_replace('/\s*\[at\]\s*/i', '@', $rawRecipient))
+            : '';
 
-        if ($recipient !== null && $recipient !== '') {
+        if ($recipient !== '' && filter_var($recipient, FILTER_VALIDATE_EMAIL) !== false) {
             rescue(static function () use ($recipient, $saved): void {
                 $subjectLine = $saved->subject
                     ? "Portfolio Inquiry: {$saved->subject}"

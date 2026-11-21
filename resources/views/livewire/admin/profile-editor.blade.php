@@ -1,8 +1,8 @@
 <section class="mx-auto w-full max-w-5xl space-y-6">
     <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-            <div class="text-xs font-semibold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">
-                {{ __('Identity & Hero') }}
+            <div class="font-mono text-xs font-bold uppercase tracking-widest text-cyan-700 dark:text-cyan-400">
+                01 // {{ __('Identity & Hero') }}
             </div>
             <flux:heading size="xl" class="mt-0.5">{{ __('Profile & Hero') }}</flux:heading>
             <flux:text class="mt-1">
@@ -11,7 +11,7 @@
         </div>
 
         <div class="flex flex-wrap items-center gap-3">
-            <flux:badge :color="$is_available ? 'green' : 'zinc'" size="lg">
+            <flux:badge :color="$is_available ? 'cyan' : 'zinc'" size="lg">
                 {{ $is_available ? __('Available for Work') : __('Currently Unavailable') }}
             </flux:badge>
 
