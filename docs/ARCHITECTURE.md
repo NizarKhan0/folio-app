@@ -81,6 +81,7 @@ erDiagram
 2. **Had Projek Featured:** Maksimum 6 projek boleh ditanda `is_featured = true` (dikawal dalam `ProjectManager`). Paparan awam mengambil maksimum 6 projek featured (`take(6)`).
 3. **Anti-Spam Contact Email:** `Profile.email` membenarkan format `[at]`. Paparan awam hanya memautkan `mailto:` jika terdapat `@`; penghantaran notifikasi e-mel dalam `PublicPortfolio::submitContact()` menukar `[at]` → `@` secara dalaman sebelum `Mail::raw()`.
 4. **Top-Layer Nested Modal:** Butang `Show Details` dalam modal `All Projects` membuka `<dialog x-ref="detailDialog">` melalui `.showModal()` supaya backdrop menutup keseluruhan viewport dan scroll luar dikunci.
+5. **Reverse Proxy & HTTPS (`bootstrap/app.php`):** `$middleware->trustProxies(at: '*');` diaktifkan supaya Livewire, Flux, dan `url()` sentiasa menjana URL `https://` di belakang Cloudflare Tunnel atau Nginx.
 
 ## 5. Peta Laluan & Komponen Livewire (`routes/web.php`)
 - `GET /` → `App\Livewire\PublicPortfolio::class` (`name('home')`)

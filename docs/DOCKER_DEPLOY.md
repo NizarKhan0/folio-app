@@ -80,11 +80,12 @@ DB_PASSWORD=tukar_password_kuat
 DB_ROOT_PASSWORD=tukar_root_password_kuat
 
 MAIL_MAILER=smtp
-MAIL_HOST=smtp.gmail.com
-MAIL_PORT=587
-MAIL_USERNAME=emel_anda@gmail.com
-MAIL_PASSWORD=app_password_gmail
-MAIL_FROM_ADDRESS="emel_anda@gmail.com"
+MAIL_SCHEME=smtps
+MAIL_HOST=smtp.resend.com
+MAIL_PORT=465
+MAIL_USERNAME=resend
+MAIL_PASSWORD=re_api_key_anda
+MAIL_FROM_ADDRESS="noreply@nizarkhan.dev"
 MAIL_FROM_NAME="${APP_NAME}"
 ```
 
@@ -94,8 +95,11 @@ docker compose up -d --build
 ```
 
 ### Langkah 4 — Jana Kunci Aplikasi & Masukkan Data Awal
+Kerana `.dockerignore` mengecualikan `.env` daripada imej Docker, jana `APP_KEY` menggunakan `--show` dan simpan ke `/opt/folio-app/.env` di hos, kemudian recreate kontena:
 ```bash
-docker compose exec app php artisan key:generate --force
+NEW_KEY=$(docker compose exec -T app php artisan key:generate --show | tr -d '\r\n')
+sed -i "s|^APP_KEY=.*|APP_KEY=${NEW_KEY}|" .env
+docker compose up -d
 docker compose exec app php artisan db:seed --force
 ```
 - `docker/entrypoint.sh` akan menyalin kesemua imej avatar & thumbnail dari `database/seeders/media/` ke volume `storage_public` secara automatik pada permulaan pertama (tanpa menimpa imej baharu yang dimuat naik melalui Admin nanti).

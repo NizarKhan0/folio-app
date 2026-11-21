@@ -75,8 +75,8 @@ Apabila `APP_ENV=production`, Laravel menyekat arahan yang mengubah pangkalan da
   ```env
   MAIL_MAILER=smtp
   MAIL_HOST=smtp.resend.com
-  MAIL_PORT=587
-  MAIL_SCHEME=tls
+  MAIL_PORT=465
+  MAIL_SCHEME=smtps
   MAIL_USERNAME=resend
   MAIL_PASSWORD=re_api_key_anda
   MAIL_FROM_ADDRESS="noreply@nizarkhan.dev"

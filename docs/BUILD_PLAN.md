@@ -6,7 +6,7 @@
 | Sesi 2 | Modul 02: Projects Showcase (`02_projects.md`) | Modul 01 | ✅ Siap — `ProjectManagerTest` & `ProjectSeeder` lulus |
 | Sesi 3 | Modul 03: Experience & Skills (`03_experience_skills.md`) | Modul 01 | ✅ Siap — `ExperienceSkillManagerTest` & 27 skills lulus |
 | Sesi 4 | Modul 04: Public Portfolio, SEO & Inbox (`04_public_and_messages.md`) | Modul 01–03 | ✅ Siap — `PublicPortfolioAndMessagesTest` lulus |
-| Sesi Akhir | Go-Live Production (`nizarkhan.dev`) | Modul 01–04 | ⏳ Sedia untuk deploy |
+| Sesi Akhir | Go-Live Production (`https://nizarkhan.dev` via Docker + Cloudflare Tunnel) | Modul 01–04 | ✅ Live — Docker, Resend SMTPS & GSC aktif |
 
 ## Prompt Setiap Sesi Penyelenggaraan (Salin & Gantikan Nama Modul)
 ```text
@@ -18,9 +18,10 @@ Selepas siap: tunjuk keputusan Quality Gates serta kemas kini `docs/STATUS.md` d
 ```
 
 ## Senarai Semak Go-Live (`nizarkhan.dev`)
-- [ ] `APP_ENV=production`, `APP_DEBUG=false`, `APP_URL=https://nizarkhan.dev`
-- [ ] Padam fail `public/hot` jika ada sebelum naik ke produksi & jalankan `npm run build`
-- [ ] Tetapkan `MAIL_MAILER=smtp` beserta kelayakan SMTP produksi dalam `.env` untuk notifikasi borang Contact
-- [ ] Pastikan `php artisan storage:link` aktif supaya avatar & thumbnail projek dipaparkan
-- [ ] Tukar kata laluan akaun admin & aktifkan 2FA / Passkey di `/settings/*`
-- [ ] Hantar `https://nizarkhan.dev/sitemap.xml` di Google Search Console
+- [x] `APP_ENV=production`, `APP_DEBUG=false`, `APP_URL=https://nizarkhan.dev`
+- [x] Fail `public/hot` dikecualikan dalam `.dockerignore` & aset dibina dengan `npm run build` dalam `Dockerfile`
+- [x] `MAIL_MAILER=smtp` (`smtp.resend.com`, port `465`, `MAIL_SCHEME=smtps`) + pengesahan DNS DKIM/SPF
+- [x] `php artisan storage:link` & auto-seeding `database/seeders/media/` melalui `docker/entrypoint.sh`
+- [x] `$middleware->trustProxies(at: '*')` dalam `bootstrap/app.php` untuk Cloudflare Tunnel HTTPS
+- [x] Hantar `https://nizarkhan.dev/sitemap.xml` & Request Indexing di Google Search Console
+- [ ] Tukar kata laluan akaun admin lalai & aktifkan 2FA / Passkey di `/settings/*`

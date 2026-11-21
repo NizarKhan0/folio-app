@@ -10,13 +10,14 @@
 | 04 | Public Portfolio, SEO & Message Inbox | `docs/modules/04_public_and_messages.md` | ✅ Siap | Modul 01, 02, 03 | Light/Dark mode, JSON-LD SEO, `/sitemap.xml`, `/robots.txt` |
 
 ## Sesi Terakhir
-- **Siap:**
+- **Siap & Live (`https://nizarkhan.dev`):**
   - Tema Cyberpunk HUD diseragamkan pada Public (Light & Dark), Auth (`/sys-console/login`, mod gelap fixed screen), Sidebar, Dashboard, dan kesemua 4 modul Admin (aksen Cyan).
-  - SEO lengkap (`<title>`, meta description, canonical, Open Graph, Twitter Card, JSON-LD `Person`/`ProfilePage`/`ItemList`, `/sitemap.xml`, `/robots.txt` dinamik, favicon Pilihan 2).
-  - Data terkini disegerakkan: 3 projek (*Personal Portfolio*, *LifeOS*, *Kanban PMO*), 3 pengalaman kerja, 27 skills (`Yii2`, `Flux UI`, `SQLite`, `Git`, `GitHub Actions`, `Linux / Ubuntu`, `Claude`, `OpenCode`, `Antigravity`, dll.), serta penukaran `[at]` → `@` untuk notifikasi e-mel Contact.
-- **Isu Terbuka:** Tiada isu kod. (Jika hendak aktifkan e-mel keluar ke Gmail pada produksi, isi tetapan SMTP dalam `.env` pelayan).
+  - SEO lengkap (`<title>` 55 aksara *Nizar Khan — Fullstack Laravel & PHP Developer Malaysia*, meta description, canonical, Open Graph, Twitter Card, JSON-LD `Person`/`ProfilePage`/`ItemList`, `/sitemap.xml`, `/robots.txt` dinamik, favicon Pilihan 2).
+  - Data terkini disegerakkan: 3 projek (*Personal Portfolio*, *LifeOS*, *Kanban PMO*), 3 pengalaman kerja, 27 skills, serta penukaran `[at]` → `@` untuk notifikasi e-mel Contact.
+  - Docker produksi (`Dockerfile` 3-stage, `docker-compose.yml` port `9002`, `docker/entrypoint.sh`, `database/seeders/media/`) & `$middleware->trustProxies(at: '*')` dalam `bootstrap/app.php` aktif di `/opt/folio-app`.
+  - Resend SMTP (`smtp.resend.com`, port `465`, `MAIL_SCHEME=smtps`), pengesahan domain Cloudflare di **Google Search Console**, penghantaran `https://nizarkhan.dev/sitemap.xml`, dan **Request Indexing** selesai.
+- **Isu Terbuka:** Tiada isu teknikal.
 
-## Langkah Seterusnya (Go-Live)
-1. Sediakan domain (`nizarkhan.dev`) dengan HTTPS dan tetapkan `APP_ENV=production`, `APP_DEBUG=false`, `APP_URL=https://nizarkhan.dev` dalam `.env` pelayan.
-2. Jalankan `npm run build`, `php artisan migrate --force`, dan `php artisan storage:link`.
-3. Daftar domain di Google Search Console dan hantar `https://nizarkhan.dev/sitemap.xml`.
+## Langkah Seterusnya
+1. Kemas kini pautan **LinkedIn**, **Resume PDF**, dan **Demo URL** projek dari panel admin apabila sudah sedia.
+2. Pantau prestasi carian & indeks di Google Search Console.
