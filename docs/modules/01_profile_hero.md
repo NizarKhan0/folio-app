@@ -1,27 +1,50 @@
 # Modul 01: Profile, Hero Settings & Dashboard Overview
-Rujuk `AGENT.md` dan `docs/ARCHITECTURE.md`. Bina **Modul 01: Profile, Hero Settings & Dashboard Overview** di atas Livewire Starter Kit:
+> Status: ✅ Siap · Disegerakkan 22 November 2026
+- Bergantung pada: Tiada · Menyediakan untuk: Modul 02, 03, 04 · Keperluan PRD: `FR-01`
 
-### 1. Migration & Schema (`profiles` — Tiada `user_id`)
-- `profiles`: `id`, `name` (string, default: 'Nizar Khan'), `headline` (string, default: 'Hi, I\'m Nizar Khan'), `tagline` (string), `bio` (text, nullable), `location` (string), `is_available` (boolean, default: true), `email` (string, nullable), `github_url` (string, nullable), `linkedin_url` (string, nullable), `resume_url` (string, nullable), `resume_path` (string, nullable), `avatar_path` (string, nullable), `banner_path` (string, nullable), `timestamps`.
+## 1. Tujuan
+Membolehkan pemilik portfolio mengurus identiti tunggal (`Profile` singleton `id = 1`), tetapan Hero (`headline`, `tagline`, `bio`, `location`, `is_available`), e-mel anti-spam (`[at]`), pautan sosial/CV, muat naik media (`avatar`, `banner`, `resumeFile`), serta memantau KPI ringkas pada `/dashboard`.
 
-### 2. Model & Business Logic (`Profile.php`)
-- Cast `is_available` sebagai `boolean`.
-- Sediakan helper statik `Profile::current(): self` yang memanggil `self::firstOrCreate(['id' => 1], [...])`.
-- Sediakan helper `avatarUrl(): ?string`, `bannerUrl(): ?string`, dan `resolvedResumeUrl(): ?string` untuk paparan aset daripada `public` storage disk.
+## 2. Data (Migration & Model)
+- Jadual `profiles` (Tiada `user_id`):
+  - `id`, `name` (string), `headline` (string), `tagline` (string), `bio` (text, nullable), `location` (string), `is_available` (boolean, default: `true`), `email` (string, nullable), `github_url` (string, nullable), `linkedin_url` (string, nullable), `resume_url` (string, nullable), `resume_path` (string, nullable), `avatar_path` (string, nullable), `banner_path` (string, nullable), `timestamps`.
+- Model `Profile`:
+  - Cast `is_available` sebagai `boolean`.
+  - Helper statik `Profile::current(): self` (`firstOrCreate(['id' => 1], [...])`).
+  - Helper media: `avatarUrl(): ?string`, `bannerUrl(): ?string`, `resolvedResumeUrl(): ?string`.
 
-### 3. Livewire UI (`app/Livewire/Admin/ProfileEditor.php` & Sidebar Starter Kit)
-- Gunakan layout Starter Kit sedia ada (`resources/views/layouts/app.blade.php`).
-- Kemas kini `resources/views/layouts/app/sidebar.blade.php` untuk menambah pautan navigasi `Profile & Hero`.
-- **Admin UI:** Borang reaktif kemas kini maklumat Hero (`name`, `headline`, `tagline`, `bio`, `location`, `email`), pautan GitHub/LinkedIn/Resume, muat naik `avatar`/`banner`/`resume` (`WithFileUploads`), dan toggle satu-klik `is_available` tanpa reload.
+## 3. Logik (`ProfileEditor.php`)
+- Validasi `email` menggunakan `['nullable', 'string', 'max:255']` (membenarkan format anti-spam seperti `nizarkhan.digital[at]gmail.com`).
+- Muat naik `avatar` (max 2MB), `banner` (max 4MB), dan `resumeFile` PDF (max 5MB) melalui `WithFileUploads` dengan pembersihan fail lama (`replaceStoredFile`).
+- Toggle satu-klik `toggleAvailability()` untuk `is_available` tanpa reload.
 
-### 4. Database Seeder (`ProfileSeeder.php` — Data Sebenar Terkini)
-- Pastikan `DatabaseSeeder` turut mencipta 1 akaun Admin lalai (`test@example.com`, password: `password`) untuk log masuk ke Starter Kit.
-- Jana 1 rekod `Profile` (`id = 1`):
-  - `name`: `'Nizar Khan'`
-  - `headline`: `'Hi, I\'m Nizar Khan'`
-  - `tagline`: `'Fullstack PHP Developer · Laravel, Livewire & Filament'`
-  - `bio`: `'I design and ship reliable web platforms, admin dashboards, and automated workflows — turning complex business processes and legacy databases into fast, production-ready systems.'`
-  - `location`: `'Kuala Lumpur, Malaysia'`
-  - `email`: `'nizarkhan.digital@gmail.com'`
-  - `github_url`: `'https://github.com/NizarKhan0'`
-  - `is_available`: `true`
+## 4. UI / API
+- Route: `GET /dashboard` (`dashboard.blade.php`), `GET /admin/profile` (`ProfileEditor::class`).
+- Menggunakan layout Cyberpunk HUD (`resources/views/layouts/app/sidebar.blade.php`), aksen Cyan, dan menu sidebar.
+
+### 4a. Senarai Skrin
+| Skrin | Route | Siapa | Elemen Utama | Tindakan |
+| :--- | :--- | :--- | :--- | :--- |
+| Overview Dashboard | `/dashboard` | Admin | 4 kad KPI Neon, status availability, ringkasan profil | Pautan pantas ke 4 modul |
+| Profile & Hero Editor | `/admin/profile` | Admin | Borang Hero, toggle availability, input `[at]` e-mel, upload avatar/banner/PDF | Save, Toggle Availability, Remove Media |
+
+### 4b. Wireframe Ringkas (`/admin/profile`)
+```text
++------------------------------------------------------------------------+
+| 01 // IDENTITY & HERO        [Available for Work]   [Save Changes]     |
+|------------------------------------------------------------------------|
+| [Avatar Upload]   [Banner Upload]   [Resume PDF Upload]                |
+| Name: [Nizar Khan]            Headline: [Hi, I'm Nizar Khan]           |
+| Tagline: [Fullstack PHP Developer · Laravel, Livewire & Filament]      |
+| Bio: [I design and ship reliable web platforms...]                     |
+| Location: [Kuala Lumpur, Malaysia]  Email: [nizarkhan.digital[at]...]  |
++------------------------------------------------------------------------+
+```
+
+## 5. Ujian & Seeder
+- `ProfileEditorTest`: Paparan, kemas kini teks, toggle availability, pengesahan `email` `[at]`, muat naik/padam media, dan `ProfileSeeder`.
+- `ProfileSeeder`: Rekod `id = 1` (`Nizar Khan`, `Kuala Lumpur, Malaysia`, `nizarkhan.digital[at]gmail.com`, `https://github.com/NizarKhan0`). `DatabaseSeeder` mencipta akaun lalai `test@example.com`.
+
+## 6. Acceptance Criteria
+- [x] Pemilik boleh kemas kini maklumat Hero, e-mel `[at]`, pautan sosial, dan muat naik media tanpa reload.
+- [x] `ProfileEditorTest` & `ProfileSeeder` lulus semua Quality Gates.

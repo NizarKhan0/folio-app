@@ -1,29 +1,54 @@
 # Modul 02: Projects Showcase Manager
-Rujuk `AGENT.md` dan `docs/ARCHITECTURE.md`. Bina **Modul 02: Projects Showcase Manager** (100% English Web UI & Full CRUD):
+> Status: ✅ Siap · Disegerakkan 22 November 2026
+- Bergantung pada: Modul 01 · Menyediakan untuk: Modul 04 · Keperluan PRD: `FR-02`
 
-### 1. Migration & Schema (`projects` — Tiada `user_id`)
-- `projects`: `id`, `title` (string), `slug` (string, unique), `description` (text), `tech_stack` (json, cth: `["Livewire", "Tailwind CSS", "Laravel", "MySQL"]`), `thumbnail_path` (string, nullable), `demo_url` (string, nullable), `repo_url` (string, nullable), `is_featured` (boolean, default: true), `is_published` (boolean, default: true), `sort_order` (integer, default: 0), `timestamps`. Indeks: `['is_published', 'sort_order']`.
+## 1. Tujuan
+Mengurus senarai projek portfolio (`Project`) lengkap dengan Full CRUD, kawalan urutan `sort_order`, muat naik thumbnail, tag `tech_stack`, pautan demo/repo bebas format (membenarkan `#` atau URL), serta had maksimum **6 projek featured**.
 
-### 2. Model & Business Logic (`Project.php`)
-- Cast `tech_stack` sebagai `array`, serta `is_featured` dan `is_published` sebagai `boolean`.
-- Scope `published()` disusun mengikut `sort_order ASC`.
+## 2. Data (Migration & Model)
+- Jadual `projects` (Tiada `user_id`):
+  - `id`, `title` (string), `slug` (string, unik), `description` (text), `tech_stack` (json), `thumbnail_path` (string, nullable), `demo_url` (string, nullable), `repo_url` (string, nullable), `is_featured` (boolean, default: `true`), `is_published` (boolean, default: `true`), `sort_order` (integer, default: `0`), `timestamps`.
+  - Indeks: `['is_published', 'sort_order']`.
+- Model `Project`:
+  - Cast `tech_stack` sebagai `array`; `is_featured` & `is_published` sebagai `boolean`.
+  - Scope `published()` disusun mengikut `sort_order ASC, id ASC` dan helper `thumbnailUrl(): ?string`.
 
-### 3. Livewire UI (`app/Livewire/Admin/ProjectManager.php`)
-- Gunakan layout sidebar Livewire Starter Kit dan tambah menu `Projects` pada sidebar.
-- **UI Language:** 100% Professional English ('Projects', 'Add Project', 'Tech Stack', 'Demo →', 'Delete Project').
-- **MANDATORY Full CRUD:**
-  1. **Create:** Modal tambah projek baharu berserta input tag `tech_stack` (comma-separated atau tag input), pautan demo/repo, dan muat naik imej thumbnail (`WithFileUploads`).
-  2. **Read:** Kad metrik ringkas & jadual senarai projek di Admin Panel.
-  3. **Update:** Butang Edit mengisi modal sedia ada tanpa reload, butang ubah urutan (`Move Up` / `Move Down` `sort_order`), serta toggle Published.
-  4. **Delete:** Butang Delete pada setiap projek berserta **Confirmation Modal** keselamatan.
+## 3. Logik (`ProjectManager.php`)
+- Had maksimum **6** projek `is_featured = true` dikuatkuasakan semasa `save()` dan `toggleFeatured()`.
+- Validasi `demo_url` dan `repo_url` menggunakan `['nullable', 'string', 'max:500']` supaya nilai `#` atau teks laluan dalaman dibenarkan.
+- Urutan `Move Up` / `Move Down` tanpa drag-and-drop.
 
-### 4. Database Seeder (`ProjectSeeder.php` — Data Sebenar Terkini)
-- Jana rekod projek sebenar:
-  1. **Personal portfolio website** (`personal-portfolio-website`):
-     - `description`: `'Cyberpunk HUD personal portfolio and full-featured admin CMS built on Laravel 13, Livewire 4, Flux UI, Alpine.js, and Tailwind CSS v4, featuring profile & hero management, project showcase with thumbnail uploads, career experience & categorized skills, contact inbox with email notifications, 2FA authentication, and CI/CD via GitHub Actions.'`
-     - `tech_stack`: `["Laravel", "Livewire", "Tailwind CSS", "Alpine JS", "PHP", "MySQL", "HTML", "CSS", "GitHub"]`
-     - `demo_url`: `'https://me.zaryue.com/'`, `is_featured`: `true`, `is_published`: `true`, `sort_order`: `1`.
-  2. **LifeOS — Personal Command Center** (`life-os`):
-     - `description`: `'Self-hosted personal productivity and autonomous command center built with Laravel 13, Livewire 4, Flux UI, and Tailwind CSS v4. Consolidates tasks & habits, goals & milestones, wallets/budgets/transactions, recurring subscriptions, meetings with reminders, brain dumps, weekly reviews, and an automated Telegram briefing engine into a single dashboard.'`
-     - `tech_stack`: `["Laravel", "Livewire", "Flux UI", "Tailwind CSS", "PHP", "MySQL", "Fortify", "Telegram Bot"]`
-     - `demo_url`: `'http://127.0.0.1:8001/'`, `is_featured`: `true`, `is_published`: `true`, `sort_order`: `2`.
+## 4. UI / API (Full CRUD)
+- Route: `GET /admin/projects` (`ProjectManager::class`).
+- Bahasa UI: 100% Bahasa Inggeris profesional (`02 // Showcase`, `Add Project`, `Tech Stack`, `Demo →`, `Delete Project`).
+
+### 4a. Senarai Skrin
+| Skrin / Modal | Route | Siapa | Elemen Utama | Tindakan |
+| :--- | :--- | :--- | :--- | :--- |
+| Projects Manager | `/admin/projects` | Admin | Kad metrik (Total, Published, Featured), jadual projek + susunan | Add, Edit, Move Up/Down, Toggle, Delete |
+| Modal Add / Edit Project | — (Modal) | Admin | Title, slug, description, tech stack chips, demo/repo (`text`), thumbnail | Save, Cancel |
+| Modal Delete Project | — (Modal) | Admin | Amaran pengesahan pemadaman rekod & thumbnail | Confirm Delete, Cancel |
+
+### 4b. Wireframe Ringkas (`/admin/projects`)
+```text
++------------------------------------------------------------------------+
+| 02 // SHOWCASE                                      [ + Add Project ]  |
+| [Total: 3] · [Published: 3] · [Featured: 3 / 6]                        |
+|------------------------------------------------------------------------|
+| #  Project                           Stack        Status    Actions    |
+| 1  Personal Portfolio Website        Laravel...   Published [Edit][Del]|
+| 2  LifeOS — Personal Command Center  Laravel...   Published [Edit][Del]|
+| 3  Kanban PMO — Project Command Ctr  Laravel...   Published [Edit][Del]|
++------------------------------------------------------------------------+
+```
+
+## 5. Ujian & Seeder
+- `ProjectManagerTest`: Full CRUD, had maksimum 6 featured, pautan bukan URL (`#`, `private-repo`), susunan `sort_order`, dan `ProjectSeeder`.
+- `ProjectSeeder`:
+  1. **Personal Portfolio Website** (`personal-portfolio-website`, `sort_order: 1`)
+  2. **LifeOS — Personal Command Center** (`life-os`, `sort_order: 2`)
+  3. **Kanban PMO — Project Command Center** (`kanban-pmo`, `sort_order: 3`)
+
+## 6. Acceptance Criteria
+- [x] Pemilik boleh melakukan Full CRUD projek, tukar urutan, dan memuat naik thumbnail.
+- [x] Had maksimum 6 projek featured dikuatkuasakan dan `ProjectManagerTest` lulus.

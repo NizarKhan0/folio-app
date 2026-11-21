@@ -1,24 +1,55 @@
-# Modul 04: Public Single-Page Portfolio & Contact Message Inbox
-Rujuk `AGENT.md` dan `docs/ARCHITECTURE.md`. Bina **Modul 04: Public Single-Page Portfolio & Contact Message Inbox** (100% English Web UI & Full CRUD):
+# Modul 04: Public Single-Page Portfolio, SEO & Contact Inbox
+> Status: ✅ Siap · Disegerakkan 22 November 2026
+- Bergantung pada: Modul 01, 02, 03 · Menyediakan untuk: Go-Live · Keperluan PRD: `FR-04`
 
-### 1. Migration & Schema (`messages` — Tiada `user_id`)
-- `messages`: `id`, `name` (string), `email` (string), `subject` (string, nullable), `message` (text), `is_read` (boolean, default: false), `timestamps`. Indeks: `['is_read', 'created_at']`.
+## 1. Tujuan
+Menyediakan laman portfolio awam single-page bertema Cyberpunk HUD (Light & Dark Mode) yang responsif dan dioptimumkan untuk Google SEO, serta peti masuk mesej (`MessageInbox`) untuk mengurus pertanyaan pelawat.
 
-### 2. Public Single-Page Portfolio (`app/Livewire/PublicPortfolio.php` pada laluan `/`)
-- Paparkan keseluruhan laman portfolio awam dalam satu halaman bertema Cyberpunk HUD yang kemas, moden, dan responsif untuk mobile, tablet, & desktop:
-  1. **Navbar:** Logo/Nama `Nizar Khan`, status `SYS // ONLINE`, pautan sauh (`Home`, `Projects`, `Experience`, `Skills`, `Contact`), serta butang menu hamburger + laci navigasi untuk mobile (`md:hidden`).
-  2. **Hero Section:** Data daripada `Profile::current()` (`Hi, I'm Nizar Khan`, tagline, bio, butang `Contact Me`, `View Projects`, & pautan Resume/GitHub/LinkedIn) berserta kad identiti 3D Cyberpunk (`NETRUNNER_ID // 001`) dan statistik langsung.
-  3. **Projects Section:** Grid 3-lajur (`lg:grid-cols-3`) memaparkan maksimum 6 projek featured daripada `Project::published()`, lencana `tech_stack`, pautan `Demo →`/`Repository →`, butang `Show Details` (modal `<flux:modal>`), serta butang `All Projects (N) →` yang membuka katalog penuh bersama native top-layer `<dialog>` (`showModal()`) untuk `Show Details` tanpa menutup modal induk.
-  4. **Experience Section:** Garis masa daripada `Experience::orderBy('sort_order')->get()` lengkap dengan huruf awal syarikat (`O`, `I`, `M`), lokasi, tempoh, huraian boleh kembang (`Details +` / `Hide −`), dan lencana `tech_stack`.
-  5. **Skills Section:** Matriks keupayaan mengikut kategori (`backend`, `frontend`, `database`, `devops_tools`) dengan penapis kategori reaktif (`All`, `Backend`, dll.).
-  6. **Get In Touch (Contact Form):** Borang Livewire reaktif (`name`, `email`, `subject`, `message`) yang terus menyimpan ke jadual `messages` + menghantar notifikasi e-mel secara opsyenal menggunakan `rescue()`.
+## 2. Data (Migration & Model)
+- Jadual `messages` (Tiada `user_id`):
+  - `id`, `name` (string), `email` (string), `subject` (string, nullable), `message` (text), `is_read` (boolean, default: `false`), `timestamps`. Indeks: `['is_read', 'created_at']`.
+- Model `Message`: cast `is_read` sebagai `boolean`, scope `unread()`.
 
-### 3. Admin Message Inbox (`app/Livewire/Admin/MessageInbox.php`)
-- Gunakan layout sidebar Livewire Starter Kit dan tambah menu `Messages` (berserta badge kiraan `unread`) pada sidebar.
-- **MANDATORY Operations:**
-  1. **Read (Admin):** Kad kiraan Unread Messages & jadual senarai mesej masuk.
-  2. **Update (Admin):** Modal baca mesej penuh & toggle satu-klik Read/Unread tanpa reload.
-  3. **Delete (Admin):** Butang Delete berserta **Confirmation Modal** keselamatan.
+## 3. Logik (`PublicPortfolio.php` & `MessageInbox.php`)
+- **Public (`/`):**
+  - Memaparkan Hero, maks 6 projek featured (`take(6)`), katalog penuh `All Projects` (`<flux:modal>`), dialog butiran `Show Details` (native top-layer `<dialog x-ref="detailDialog">` dengan `showModal()`), garis masa Experience boleh kembang, matriks Skills dengan penapis kategori, dan borang Contact.
+  - `submitContact()` menyimpan ke jadual `messages` dan menukar `[at]` → `@` pada `Profile.email` sebelum menghantar e-mel melalui `Mail::raw()` dalam `rescue()`.
+- **SEO & Layout (`public.blade.php` & `routes/web.php`):**
+  - `<title>` bersih, meta description, keywords, canonical, Open Graph, Twitter Card, JSON-LD (`WebSite`, `ProfilePage`, `Person`, `ItemList`), `GET /sitemap.xml`, dan `GET /robots.txt` dinamik.
+- **Inbox (`/admin/messages`):**
+  - Papar kiraan unread, buka modal baca penuh, toggle Read/Unread, dan Delete dengan Confirmation Modal.
 
-### 4. Database Seeder (`MessageSeeder.php`)
-- Jana 2 contoh mesej pertanyaan kerja/projek di dalam jadual `messages` (1 `is_read = false`, 1 `is_read = true`) dan panggil kesemua seeder di dalam `DatabaseSeeder.php`.
+## 4. UI / API
+- Route Awam: `GET /` (`PublicPortfolio::class`), `GET /sitemap.xml`, `GET /robots.txt`.
+- Route Admin: `GET /admin/messages` (`MessageInbox::class`).
+
+### 4a. Senarai Skrin
+| Skrin / Modal | Route | Siapa | Elemen Utama | Tindakan |
+| :--- | :--- | :--- | :--- | :--- |
+| Public Portfolio | `/` | Awam | Navbar + scroll progress bar + toggle tema + menu mobile, Hero, Projects, Experience, Skills, Contact | Navigasi, Tukar Tema, Modal, Hantar Mesej |
+| All Projects & Detail | — (Modal + `<dialog>`) | Awam | Grid semua projek & top-layer centered detail dialog | Show Details, Close |
+| Message Inbox | `/admin/messages` | Admin | KPI Unread/Read, senarai mesej, modal baca penuh | View, Toggle Read/Unread, Delete |
+
+### 4b. Wireframe Ringkas (`/`)
+```text
++------------------------------------------------------------------------+
+| [NK] NIZAR KHAN       [Home][Projects][Experience][Skills][Contact][☀] |
+| ====== scroll progress neon bar ====================================== |
+| [Available for Work] [NODE // Kuala Lumpur]  | NETRUNNER_ID // 001     |
+| Hi, I'm Nizar Khan                           | [Avatar] Nizar Khan     |
+| >_ Fullstack PHP Developer...                | [3 Proj][3 Role][27 Skl]|
+|------------------------------------------------------------------------|
+| 01 // DEPLOYED_SYSTEMS (Grid 3-Lajur, Maks 6 Featured + [All Projects])|
+| 02 // CAREER_TIMELINE  (Garis Masa 3 Pengalaman Boleh Kembang)         |
+| 03 // CAPABILITY_MATRIX (Penapis Kategori + 4 Kad Kategori Skills)     |
+| 04 // COMMS_CHANNEL    (Info Lokasi/E-mel [at] + Borang Contact)       |
++------------------------------------------------------------------------+
+```
+
+## 5. Ujian & Seeder
+- `PublicPortfolioAndMessagesTest`: Paparan semua seksyen, had 6 featured + modal `All Projects`, penapis kategori skills, SEO metadata & JSON-LD, `/sitemap.xml`, `/robots.txt` dinamik, `/sys-console/login` (`noindex` & `/login` = 404), penghantaran borang Contact dengan e-mel `[at]`, serta operasi Inbox.
+- `MessageSeeder`: 2 contoh mesej (`1` unread, `1` read).
+
+## 6. Acceptance Criteria
+- [x] Laman awam responsif pada mobile, tablet, & desktop dengan Light & Dark Mode.
+- [x] SEO Google (JSON-LD, `/sitemap.xml`, `/robots.txt` dinamik) & borang Contact berfungsi dan lulus semua Quality Gates.

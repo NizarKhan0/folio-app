@@ -4,7 +4,7 @@
     $seoProjects = \App\Models\Project::published()->take(6)->get();
     $latestExperience = \App\Models\Experience::query()->orderBy('sort_order')->first();
 
-    $seoTitle = trim($seoProfile->name.' — '.$seoProfile->tagline, ' —');
+    $seoTitle = trim($seoProfile->name.' — Fullstack Laravel & PHP Developer Malaysia', ' —');
     $seoDescription = \Illuminate\Support\Str::limit(
         trim((string) ($seoProfile->bio ?: $seoProfile->tagline)),
         160,

@@ -168,6 +168,7 @@ class PublicPortfolioAndMessagesTest extends TestCase
 
         $this->get(route('home'))
             ->assertOk()
+            ->assertSee('<title>Nizar Khan — Fullstack Laravel &amp; PHP Developer Malaysia</title>', false)
             ->assertSee('<link rel="canonical"', false)
             ->assertSee('<meta name="description"', false)
             ->assertSee('<meta property="og:title"', false)
